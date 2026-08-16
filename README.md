@@ -1,57 +1,92 @@
-# Welcome to your Expo app 👋
+# Expo Foundation Shell
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+This repository contains a production-oriented Expo Router foundation for a future Malaysia/Myanmar community application. It intentionally avoids a final brand, fake backend, and polished product UI so the next task can focus on premium screen design instead of architecture cleanup.
 
-## Get started
+## What is included
 
-1. Install dependencies
+- Expo Router route structure with an expandable bottom-tab shell
+- Strict TypeScript setup with `@/*` path aliases
+- Theme foundation for light, dark, and system preferences
+- Zustand stores for app settings and authentication session state
+- React Query setup for server-state and offline-first query defaults
+- Secure token storage via Expo SecureStore
+- Localization scaffolding for English and Burmese
+- Centralized API client with timeout, cancellation, and normalized errors
+- Architecture and security documentation for the future backend and database
+
+## Quick start
+
+1. Install dependencies:
 
    ```bash
    npm install
    ```
 
-2. Start the app
+2. Create a local environment file from `.env.example` and point `EXPO_PUBLIC_API_URL` at your backend.
+
+3. Start the app:
 
    ```bash
-   npx expo start
+   npm run start
    ```
 
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+## Scripts
 
 ```bash
-npm run reset-project
+npm run start
+npm run android
+npm run ios
+npm run web
+npm run lint
+npm run typecheck
+npm run format
+npm run format:check
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## Project structure
 
-### Other setup steps
+```text
+app/
+├── assets/
+├── docs/
+├── src/
+│   ├── app/
+│   ├── components/
+│   ├── config/
+│   ├── constants/
+│   ├── features/
+│   ├── hooks/
+│   ├── lib/
+│   ├── locales/
+│   ├── services/
+│   ├── store/
+│   ├── theme/
+│   ├── types/
+│   └── utils/
+├── .env.example
+└── README.md
+```
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+## Architecture notes
 
-## Learn more
+- The mobile app is prepared to talk only to a secure backend API, never directly to PostgreSQL.
+- The current screens are route placeholders, not product UI.
+- Feature directories and typed service contracts are prepared for exchange rates, gold prices, news, services, and profile/auth flows.
+- Sensitive tokens belong in SecureStore, while ordinary user preferences can live in AsyncStorage-backed persisted state.
 
-To learn more about developing your project with Expo, look at the following resources:
+## Documents
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+- `docs/architecture.md`
+- `docs/database.md`
+- `docs/security.md`
+- `docs/development.md`
+- `docs/roadmap.md`
 
-## Join the community
+## Intentionally not implemented yet
 
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+- Final brand name, logo, and visual identity
+- Real backend endpoints or production credentials
+- Fake authentication screens or fake production data
+- Premium home screen UI and full feature screens
+# Malay-Myanmar-App
 # Malay-Myanmar-App
