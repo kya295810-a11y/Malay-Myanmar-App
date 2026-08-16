@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { SymbolView } from 'expo-symbols';
 import {
+  ImageBackground,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -10,6 +11,17 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 import { useRouter } from 'expo-router';
+
+/* =============================================================
+   KUALA LUMPUR IMAGES
+============================================================= */
+
+const KL_DAY = require('../../../assets/images/kl-day.png');
+const KL_NIGHT = require('../../../assets/images/kl-night.png');
+
+/* =============================================================
+   LIGHT THEME
+============================================================= */
 
 const LIGHT = {
   background: '#F4F6F8',
@@ -23,6 +35,10 @@ const LIGHT = {
   soft: '#F4F7FA',
 };
 
+/* =============================================================
+   DARK THEME
+============================================================= */
+
 const DARK = {
   background: '#0B111A',
   surface: '#121A26',
@@ -35,6 +51,10 @@ const DARK = {
   soft: '#192332',
 };
 
+/* =============================================================
+   HOME SCREEN
+============================================================= */
+
 export default function HomeScreen() {
   const router = useRouter();
 
@@ -45,6 +65,10 @@ export default function HomeScreen() {
   const userName = 'Kyaw San Lin';
 
   const styles = createStyles(colors);
+
+  /* =========================================================
+     THEME TOGGLE
+  ========================================================= */
 
   const toggleTheme = () => {
     setIsDark((current) => !current);
@@ -60,6 +84,7 @@ export default function HomeScreen() {
       />
 
       <View style={styles.container}>
+
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.content}
@@ -70,18 +95,21 @@ export default function HomeScreen() {
           ===================================================== */}
 
           <View style={styles.header}>
+
             <View style={styles.welcomeContainer}>
+
               <Text style={styles.welcome}>
-                Welcome
+                Wellcome
               </Text>
 
               <Text style={styles.userName}>
                 {userName}
               </Text>
+
             </View>
 
             {/* =================================================
-                LIGHT / DARK ICON BUTTON
+                LIGHT / DARK BUTTON
             ================================================= */}
 
             <Pressable
@@ -98,6 +126,7 @@ export default function HomeScreen() {
                 pressed && styles.pressed,
               ]}
             >
+
               <SymbolView
                 name={
                   isDark
@@ -112,35 +141,57 @@ export default function HomeScreen() {
                 }
                 weight="semibold"
               />
+
             </Pressable>
+
           </View>
 
           {/* =====================================================
               KUALA LUMPUR
+              
+              TOP OF IMAGE IS PRESERVED.
+              NO CIRCLE.
+              NO BUILDING LOGO.
           ===================================================== */}
 
-          <View style={styles.locationCard}>
+          <ImageBackground
+            source={isDark ? KL_NIGHT : KL_DAY}
+            style={styles.locationCard}
+            imageStyle={styles.locationImage}
+            resizeMode="cover"
+          >
 
-            <View style={styles.locationCircle}>
-              <Text style={styles.buildingIcon}>
-                ▥
-              </Text>
+            {/* PHOTO OVERLAY */}
+
+            <View
+              style={[
+                styles.locationOverlay,
+                isDark && styles.locationOverlayDark,
+              ]}
+            >
+
+              {/* =================================================
+                  LOCATION TEXT
+              ================================================= */}
+
+              <View style={styles.locationText}>
+
+                <Text style={styles.locationTitle}>
+                  Kuala Lumpur
+                </Text>
+
+                <Text style={styles.locationSubtitle}>
+                  Malaysia 🇲🇾
+                </Text>
+
+              </View>
+
             </View>
 
-            <View style={styles.locationText}>
-              <Text style={styles.locationTitle}>
-                Kuala Lumpur
-              </Text>
-
-              <Text style={styles.locationSubtitle}>
-                Malaysia 🇲🇾
-              </Text>
-            </View>
-
-          </View>
+          </ImageBackground>
 
           {/* =====================================================
-              EXCHANGE RATE
+              EXCHANGE RATE HEADER
           ===================================================== */}
 
           <View style={styles.sectionHeader}>
@@ -153,12 +204,18 @@ export default function HomeScreen() {
               onPress={() => router.push('/exchange')}
               hitSlop={10}
             >
+
               <Text style={styles.seeAll}>
                 See All
               </Text>
+
             </Pressable>
 
           </View>
+
+          {/* =====================================================
+              EXCHANGE RATE CARD
+          ===================================================== */}
 
           <Pressable
             onPress={() => router.push('/exchange')}
@@ -168,7 +225,7 @@ export default function HomeScreen() {
             ]}
           >
 
-            {/* MYR → MMK */}
+            {/* CURRENCY ROW */}
 
             <View style={styles.currencyRow}>
 
@@ -181,6 +238,7 @@ export default function HomeScreen() {
                 </Text>
 
                 <View>
+
                   <Text style={styles.currencyCode}>
                     MYR
                   </Text>
@@ -188,6 +246,7 @@ export default function HomeScreen() {
                   <Text style={styles.currencyName}>
                     Malaysian Ringgit
                   </Text>
+
                 </View>
 
               </View>
@@ -207,6 +266,7 @@ export default function HomeScreen() {
                 </Text>
 
                 <View>
+
                   <Text style={styles.currencyCode}>
                     MMK
                   </Text>
@@ -214,6 +274,7 @@ export default function HomeScreen() {
                   <Text style={styles.currencyName}>
                     Myanmar Kyat
                   </Text>
+
                 </View>
 
               </View>
@@ -249,7 +310,7 @@ export default function HomeScreen() {
           </Pressable>
 
           {/* =====================================================
-              LATEST NEWS
+              LATEST NEWS HEADER
           ===================================================== */}
 
           <View
@@ -267,9 +328,11 @@ export default function HomeScreen() {
               onPress={() => router.push('/news')}
               hitSlop={10}
             >
+
               <Text style={styles.seeAll}>
                 See All
               </Text>
+
             </Pressable>
 
           </View>
@@ -383,11 +446,12 @@ export default function HomeScreen() {
           <View style={styles.bottomSpace} />
 
         </ScrollView>
+
       </View>
+
     </SafeAreaView>
   );
 }
-
 
 /* =============================================================
    STYLES
@@ -426,7 +490,6 @@ const createStyles = (
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
-
       marginBottom: 22,
     },
 
@@ -437,34 +500,27 @@ const createStyles = (
 
     welcome: {
       color: colors.text,
-
       fontSize: 21,
       lineHeight: 27,
-
       fontWeight: '700',
-
       letterSpacing: -0.3,
     },
 
     userName: {
       color: colors.text,
-
       fontSize: 16,
       lineHeight: 22,
-
       fontWeight: '500',
-
       marginTop: 3,
     },
 
     /* =========================================================
-       LIGHT / DARK ICON BUTTON
+       LIGHT / DARK BUTTON
     ========================================================= */
 
     themeButton: {
       width: 44,
       height: 44,
-
       borderRadius: 22,
 
       backgroundColor: colors.surface,
@@ -504,59 +560,72 @@ const createStyles = (
     },
 
     /* =========================================================
-       KUALA LUMPUR
+       KUALA LUMPUR CARD
+       
+       175px gives the image more vertical space.
     ========================================================= */
 
     locationCard: {
-      height: 150,
+      height: 175,
 
       borderRadius: 22,
 
-      backgroundColor: colors.navy,
-
       overflow: 'hidden',
-
-      justifyContent: 'center',
-      alignItems: 'center',
 
       marginBottom: 34,
 
       borderWidth: 1,
       borderColor: colors.navyLight,
+
+      backgroundColor: colors.navy,
     },
 
-    locationCircle: {
+    /* =========================================================
+       KL IMAGE
+       
+       IMPORTANT:
+       - No negative translateY.
+       - Image is slightly taller than the card.
+       - top: 0 keeps the ORIGINAL TOP of the image visible.
+       - Bottom is allowed to crop.
+       
+       This makes the Twin Towers appear from the top.
+    ========================================================= */
+
+    locationImage: {
+      borderRadius: 22,
+
+      width: '100%',
+      height: '125%',
+
       position: 'absolute',
-
-      width: 118,
-      height: 118,
-
-      borderRadius: 59,
-
-      backgroundColor: colors.navyLight,
-
-      alignItems: 'center',
-      justifyContent: 'center',
-
-      top: 18,
-
-      left: '50%',
-
-      marginLeft: -59,
+      top: 0,
+      left: 0,
     },
 
-    buildingIcon: {
-      color: '#FFFFFF',
+    /* =========================================================
+       PHOTO OVERLAY
+    ========================================================= */
 
-      fontSize: 58,
+    locationOverlay: {
+      flex: 1,
 
-      fontWeight: '700',
+      backgroundColor: 'rgba(13, 37, 78, 0.08)',
     },
+
+    locationOverlayDark: {
+      backgroundColor: 'rgba(3, 12, 30, 0.16)',
+    },
+
+    /* =========================================================
+       LOCATION TEXT
+    ========================================================= */
 
     locationText: {
       position: 'absolute',
 
       left: 18,
+
       bottom: 17,
     },
 
@@ -564,18 +633,38 @@ const createStyles = (
       color: '#FFFFFF',
 
       fontSize: 21,
+
       lineHeight: 26,
 
       fontWeight: '700',
+
+      textShadowColor: 'rgba(0, 0, 0, 0.55)',
+
+      textShadowOffset: {
+        width: 0,
+        height: 1,
+      },
+
+      textShadowRadius: 4,
     },
 
     locationSubtitle: {
-      color: '#E7EDF8',
+      color: '#F1F5F9',
 
       fontSize: 15,
+
       lineHeight: 21,
 
       marginTop: 1,
+
+      textShadowColor: 'rgba(0, 0, 0, 0.55)',
+
+      textShadowOffset: {
+        width: 0,
+        height: 1,
+      },
+
+      textShadowRadius: 4,
     },
 
     /* =========================================================
@@ -586,6 +675,7 @@ const createStyles = (
       flexDirection: 'row',
 
       alignItems: 'center',
+
       justifyContent: 'space-between',
 
       marginBottom: 13,
@@ -595,6 +685,7 @@ const createStyles = (
       color: colors.text,
 
       fontSize: 20,
+
       lineHeight: 26,
 
       fontWeight: '700',
@@ -620,10 +711,13 @@ const createStyles = (
       borderRadius: 19,
 
       borderWidth: 1,
+
       borderColor: colors.border,
 
       paddingHorizontal: 17,
+
       paddingTop: 17,
+
       paddingBottom: 16,
 
       marginBottom: 27,
@@ -633,6 +727,7 @@ const createStyles = (
       flexDirection: 'row',
 
       alignItems: 'center',
+
       justifyContent: 'space-between',
     },
 
@@ -654,6 +749,7 @@ const createStyles = (
       color: colors.text,
 
       fontSize: 17,
+
       lineHeight: 21,
 
       fontWeight: '700',
@@ -663,6 +759,7 @@ const createStyles = (
       color: colors.muted,
 
       fontSize: 11,
+
       lineHeight: 16,
 
       marginTop: 1,
@@ -684,6 +781,7 @@ const createStyles = (
       backgroundColor: colors.border,
 
       marginTop: 16,
+
       marginBottom: 13,
     },
 
@@ -691,6 +789,7 @@ const createStyles = (
       flexDirection: 'row',
 
       alignItems: 'center',
+
       justifyContent: 'center',
     },
 
@@ -698,6 +797,7 @@ const createStyles = (
       color: colors.text,
 
       fontSize: 29,
+
       lineHeight: 35,
 
       fontWeight: '700',
@@ -709,6 +809,7 @@ const createStyles = (
       color: colors.muted,
 
       fontSize: 25,
+
       lineHeight: 30,
 
       marginHorizontal: 9,
@@ -744,11 +845,13 @@ const createStyles = (
       borderRadius: 18,
 
       borderWidth: 1,
+
       borderColor: colors.border,
 
       minHeight: 92,
 
       paddingHorizontal: 11,
+
       paddingVertical: 11,
 
       marginBottom: 11,
@@ -756,6 +859,7 @@ const createStyles = (
 
     newsIconBox: {
       width: 52,
+
       height: 52,
 
       borderRadius: 15,
@@ -763,6 +867,7 @@ const createStyles = (
       backgroundColor: colors.soft,
 
       alignItems: 'center',
+
       justifyContent: 'center',
 
       marginRight: 12,
@@ -778,6 +883,7 @@ const createStyles = (
       color: colors.blue,
 
       fontSize: 11,
+
       lineHeight: 15,
 
       fontWeight: '700',
@@ -789,6 +895,7 @@ const createStyles = (
       color: colors.text,
 
       fontSize: 14,
+
       lineHeight: 18,
 
       fontWeight: '600',
@@ -798,10 +905,15 @@ const createStyles = (
       color: colors.muted,
 
       fontSize: 10,
+
       lineHeight: 14,
 
       marginTop: 4,
     },
+
+    /* =========================================================
+       PRESSED CARD
+    ========================================================= */
 
     cardPressed: {
       opacity: 0.75,
@@ -812,6 +924,10 @@ const createStyles = (
         },
       ],
     },
+
+    /* =========================================================
+       BOTTOM SPACE
+    ========================================================= */
 
     bottomSpace: {
       height: 24,
