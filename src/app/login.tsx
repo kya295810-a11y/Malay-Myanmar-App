@@ -10,7 +10,7 @@ import {
   TextInput,
   View,
 } from "react-native";
-import { router } from "expo-router";
+import { router, type Href } from "expo-router";
 
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
@@ -54,6 +54,7 @@ export default function LoginScreen() {
 
           {/* Form */}
           <View style={styles.form}>
+            {/* Email */}
             <View style={styles.inputGroup}>
               <Text style={styles.label}>Email</Text>
 
@@ -69,6 +70,7 @@ export default function LoginScreen() {
               />
             </View>
 
+            {/* Password */}
             <View style={styles.inputGroup}>
               <View style={styles.passwordHeader}>
                 <Text style={styles.label}>Password</Text>
@@ -97,10 +99,15 @@ export default function LoginScreen() {
 
             {/* Forgot password */}
             <Pressable
-              onPress={() => {}}
+              onPress={() =>
+                router.push("/forgot-password" as Href)
+              }
               style={styles.forgotButton}
+              hitSlop={8}
             >
-              <Text style={styles.forgotText}>Forgot password?</Text>
+              <Text style={styles.forgotText}>
+                Forgot password?
+              </Text>
             </Pressable>
 
             {/* Login */}
@@ -111,7 +118,9 @@ export default function LoginScreen() {
                 pressed && styles.buttonPressed,
               ]}
             >
-              <Text style={styles.loginButtonText}>Log in</Text>
+              <Text style={styles.loginButtonText}>
+                Log in
+              </Text>
             </Pressable>
           </View>
 
@@ -119,7 +128,9 @@ export default function LoginScreen() {
           <View style={styles.dividerRow}>
             <View style={styles.divider} />
 
-            <Text style={styles.dividerText}>or continue with</Text>
+            <Text style={styles.dividerText}>
+              or continue with
+            </Text>
 
             <View style={styles.divider} />
           </View>
@@ -150,14 +161,16 @@ export default function LoginScreen() {
           {/* Sign up */}
           <View style={styles.signupRow}>
             <Text style={styles.signupText}>
-             Don&apos;t have an account?
+              Don&apos;t have an account?
             </Text>
 
             <Pressable
-             onPress={() => router.push("/signup")}
-             hitSlop={8}
-              >
-           <Text style={styles.signupLink}> Sign up</Text>
+              onPress={() => router.push("/signup" as Href)}
+              hitSlop={8}
+            >
+              <Text style={styles.signupLink}>
+                {" "}Sign up
+              </Text>
             </Pressable>
           </View>
 
