@@ -85,10 +85,12 @@ export default function HomeScreen() {
 
       <View style={styles.container}>
 
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={styles.content}
-        >
+      <ScrollView
+      showsVerticalScrollIndicator={false}
+      contentContainerStyle={styles.content}
+      bounces={true}
+     alwaysBounceVertical={true}
+      >
 
           {/* =====================================================
               WELCOME
@@ -929,7 +931,7 @@ const createStyles = (
        BOTTOM SPACE
     ========================================================= */
 
-    bottomSpace: {
-      height: 24,
-    },
+   bottomSpace: {
+  height: 70,
+},
   });
