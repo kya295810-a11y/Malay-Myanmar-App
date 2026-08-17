@@ -225,14 +225,21 @@ const styles = StyleSheet.create({
     backgroundColor: "#071A31",
   },
 
-  background: {
-    ...StyleSheet.absoluteFillObject,
-  },
-
-  overlay: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: "rgba(3, 18, 40, 0.48)",
-  },
+background: {
+  position: "absolute",
+  top: 0,
+  right: 0,
+  bottom: 0,
+  left: 0,
+},
+ overlay: {
+  position: "absolute",
+  top: 0,
+  right: 0,
+  bottom: 0,
+  left: 0,
+  backgroundColor: "rgba(3, 18, 40, 0.48)",
+},
 
   safeArea: {
     flex: 1,
@@ -294,10 +301,14 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(255,255,255,0.14)",
   },
 
-  panelOverlay: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: "rgba(255,255,255,0.08)",
-  },
+ panelOverlay: {
+  position: "absolute",
+  top: 0,
+  right: 0,
+  bottom: 0,
+  left: 0,
+  backgroundColor: "rgba(255,255,255,0.08)",
+},
 
   /* Header */
 
