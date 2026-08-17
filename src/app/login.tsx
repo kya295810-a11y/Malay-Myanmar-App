@@ -3,14 +3,19 @@ import {
   KeyboardAvoidingView,
   Platform,
   Pressable,
-  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
   TextInput,
   View,
+  ImageBackground,
 } from "react-native";
+import { BlurView } from "expo-blur";
 import { router, type Href } from "expo-router";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { StatusBar } from "expo-status-bar";
+
+const LOGIN_BACKGROUND = require("../../../assets/images/login-bg.jpg");
 
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
@@ -24,170 +29,213 @@ export default function LoginScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <KeyboardAvoidingView
-        style={styles.keyboardView}
-        behavior={Platform.OS === "ios" ? "padding" : undefined}
+    <View style={styles.screen}>
+      <StatusBar style="light" />
+
+      {/* Background image */}
+      <ImageBackground
+        source={LOGIN_BACKGROUND}
+        resizeMode="cover"
+        style={styles.background}
       >
-        <ScrollView
-          contentContainerStyle={styles.container}
-          keyboardShouldPersistTaps="handled"
-          showsVerticalScrollIndicator={false}
+        {/* Blur */}
+        <BlurView
+          intensity={48}
+          tint="dark"
+          style={StyleSheet.absoluteFill}
+        />
+
+        {/* Blue / dark overlay */}
+        <View style={styles.overlay} />
+      </ImageBackground>
+
+      <SafeAreaView style={styles.safeArea}>
+        <KeyboardAvoidingView
+          style={styles.keyboardView}
+          behavior={Platform.OS === "ios" ? "padding" : undefined}
         >
-          {/* Brand */}
-          <View style={styles.brandSection}>
-            <View style={styles.logo}>
-              <Text style={styles.logoText}>M</Text>
+          <ScrollView
+            contentContainerStyle={styles.container}
+            keyboardShouldPersistTaps="handled"
+            showsVerticalScrollIndicator={false}
+          >
+            {/* Brand */}
+            <View style={styles.brandSection}>
+              <View style={styles.logo}>
+                <Text style={styles.logoText}>M</Text>
+              </View>
+
+              <Text style={styles.brandName}>Malay MM</Text>
             </View>
 
-            <Text style={styles.brandName}>Malay MM</Text>
-          </View>
+            {/* Login panel */}
+            <BlurView
+              intensity={25}
+              tint="light"
+              style={styles.loginPanel}
+            >
+              <View style={styles.panelOverlay} />
 
-          {/* Header */}
-          <View style={styles.header}>
-            <Text style={styles.title}>Welcome back</Text>
+              {/* Header */}
+              <View style={styles.header}>
+                <Text style={styles.title}>Welcome back</Text>
 
-            <Text style={styles.subtitle}>
-              Sign in to continue your journey with Malay MM.
-            </Text>
-          </View>
+                <Text style={styles.subtitle}>
+                  Sign in to continue with Malay MM.
+                </Text>
+              </View>
 
-          {/* Form */}
-          <View style={styles.form}>
-            {/* Email */}
-            <View style={styles.inputGroup}>
-              <Text style={styles.label}>Email</Text>
+              {/* Form */}
+              <View style={styles.form}>
+                {/* Email */}
+                <View style={styles.inputGroup}>
+                  <Text style={styles.label}>Email</Text>
 
-              <TextInput
-                value={email}
-                onChangeText={setEmail}
-                placeholder="you@example.com"
-                placeholderTextColor="#9CA3AF"
-                keyboardType="email-address"
-                autoCapitalize="none"
-                autoCorrect={false}
-                style={styles.input}
-              />
-            </View>
+                  <TextInput
+                    value={email}
+                    onChangeText={setEmail}
+                    placeholder="you@example.com"
+                    placeholderTextColor="#AAB4C3"
+                    keyboardType="email-address"
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    style={styles.input}
+                  />
+                </View>
 
-            {/* Password */}
-            <View style={styles.inputGroup}>
-              <View style={styles.passwordHeader}>
-                <Text style={styles.label}>Password</Text>
+                {/* Password */}
+                <View style={styles.inputGroup}>
+                  <View style={styles.passwordHeader}>
+                    <Text style={styles.label}>Password</Text>
 
+                    <Pressable
+                      onPress={() => setShowPassword(!showPassword)}
+                      hitSlop={8}
+                    >
+                      <Text style={styles.showPassword}>
+                        {showPassword ? "Hide" : "Show"}
+                      </Text>
+                    </Pressable>
+                  </View>
+
+                  <TextInput
+                    value={password}
+                    onChangeText={setPassword}
+                    placeholder="Enter your password"
+                    placeholderTextColor="#AAB4C3"
+                    secureTextEntry={!showPassword}
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    style={styles.input}
+                  />
+                </View>
+
+                {/* Forgot password */}
                 <Pressable
-                  onPress={() => setShowPassword(!showPassword)}
+                  onPress={() =>
+                    router.push("/forgot-password" as Href)
+                  }
+                  style={styles.forgotButton}
                   hitSlop={8}
                 >
-                  <Text style={styles.showPassword}>
-                    {showPassword ? "Hide" : "Show"}
+                  <Text style={styles.forgotText}>
+                    Forgot password?
+                  </Text>
+                </Pressable>
+
+                {/* Login */}
+                <Pressable
+                  onPress={handleLogin}
+                  style={({ pressed }) => [
+                    styles.loginButton,
+                    pressed && styles.buttonPressed,
+                  ]}
+                >
+                  <Text style={styles.loginButtonText}>
+                    Log in
                   </Text>
                 </Pressable>
               </View>
 
-              <TextInput
-                value={password}
-                onChangeText={setPassword}
-                placeholder="Enter your password"
-                placeholderTextColor="#9CA3AF"
-                secureTextEntry={!showPassword}
-                autoCapitalize="none"
-                autoCorrect={false}
-                style={styles.input}
-              />
-            </View>
+              {/* Divider */}
+              <View style={styles.dividerRow}>
+                <View style={styles.divider} />
 
-            {/* Forgot password */}
-            <Pressable
-              onPress={() =>
-                router.push("/forgot-password" as Href)
-              }
-              style={styles.forgotButton}
-              hitSlop={8}
-            >
-              <Text style={styles.forgotText}>
-                Forgot password?
-              </Text>
-            </Pressable>
+                <Text style={styles.dividerText}>
+                  or continue with
+                </Text>
 
-            {/* Login */}
-            <Pressable
-              onPress={handleLogin}
-              style={({ pressed }) => [
-                styles.loginButton,
-                pressed && styles.buttonPressed,
-              ]}
-            >
-              <Text style={styles.loginButtonText}>
-                Log in
-              </Text>
-            </Pressable>
-          </View>
+                <View style={styles.divider} />
+              </View>
 
-          {/* Divider */}
-          <View style={styles.dividerRow}>
-            <View style={styles.divider} />
+              {/* Social buttons */}
+              <View style={styles.socialRow}>
+                <Pressable
+                  style={({ pressed }) => [
+                    styles.socialButton,
+                    pressed && styles.socialPressed,
+                  ]}
+                >
+                  <Text style={styles.googleIcon}>G</Text>
+                  <Text style={styles.socialText}>Google</Text>
+                </Pressable>
 
-            <Text style={styles.dividerText}>
-              or continue with
+                <Pressable
+                  style={({ pressed }) => [
+                    styles.socialButton,
+                    pressed && styles.socialPressed,
+                  ]}
+                >
+                  <Text style={styles.appleIcon}>●</Text>
+                  <Text style={styles.socialText}>Apple</Text>
+                </Pressable>
+              </View>
+
+              {/* Sign up */}
+              <View style={styles.signupRow}>
+                <Text style={styles.signupText}>
+                  Don&apos;t have an account?
+                </Text>
+
+                <Pressable
+                  onPress={() => router.push("/signup" as Href)}
+                  hitSlop={8}
+                >
+                  <Text style={styles.signupLink}>
+                    {" "}Sign up
+                  </Text>
+                </Pressable>
+              </View>
+            </BlurView>
+
+            {/* Footer */}
+            <Text style={styles.footer}>
+              By continuing, you agree to our Terms and Privacy Policy.
             </Text>
-
-            <View style={styles.divider} />
-          </View>
-
-          {/* Social buttons */}
-          <View style={styles.socialRow}>
-            <Pressable
-              style={({ pressed }) => [
-                styles.socialButton,
-                pressed && styles.socialPressed,
-              ]}
-            >
-              <Text style={styles.socialIcon}>G</Text>
-              <Text style={styles.socialText}>Google</Text>
-            </Pressable>
-
-            <Pressable
-              style={({ pressed }) => [
-                styles.socialButton,
-                pressed && styles.socialPressed,
-              ]}
-            >
-              <Text style={styles.appleIcon}>●</Text>
-              <Text style={styles.socialText}>Apple</Text>
-            </Pressable>
-          </View>
-
-          {/* Sign up */}
-          <View style={styles.signupRow}>
-            <Text style={styles.signupText}>
-              Don&apos;t have an account?
-            </Text>
-
-            <Pressable
-              onPress={() => router.push("/signup" as Href)}
-              hitSlop={8}
-            >
-              <Text style={styles.signupLink}>
-                {" "}Sign up
-              </Text>
-            </Pressable>
-          </View>
-
-          {/* Footer */}
-          <Text style={styles.footer}>
-            By continuing, you agree to our Terms and Privacy Policy.
-          </Text>
-        </ScrollView>
-      </KeyboardAvoidingView>
-    </SafeAreaView>
+          </ScrollView>
+        </KeyboardAvoidingView>
+      </SafeAreaView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  screen: {
+    flex: 1,
+    backgroundColor: "#071A31",
+  },
+
+  background: {
+    ...StyleSheet.absoluteFillObject,
+  },
+
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: "rgba(3, 18, 40, 0.48)",
+  },
+
   safeArea: {
     flex: 1,
-    backgroundColor: "#F8FBFF",
   },
 
   keyboardView: {
@@ -196,8 +244,8 @@ const styles = StyleSheet.create({
 
   container: {
     flexGrow: 1,
-    paddingHorizontal: 24,
-    paddingTop: 32,
+    paddingHorizontal: 20,
+    paddingTop: 18,
     paddingBottom: 28,
   },
 
@@ -205,52 +253,71 @@ const styles = StyleSheet.create({
 
   brandSection: {
     alignItems: "center",
-    marginBottom: 52,
+    marginBottom: 24,
   },
 
   logo: {
-    width: 48,
-    height: 48,
-    borderRadius: 15,
-    backgroundColor: "#4AA8FF",
+    width: 50,
+    height: 50,
+    borderRadius: 16,
+    backgroundColor: "#3195F5",
     alignItems: "center",
     justifyContent: "center",
-    marginBottom: 12,
+    marginBottom: 10,
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.25)",
   },
 
   logoText: {
     color: "#FFFFFF",
-    fontSize: 24,
+    fontSize: 25,
     fontWeight: "800",
   },
 
   brandName: {
-    fontSize: 17,
+    color: "#FFFFFF",
+    fontSize: 18,
     fontWeight: "700",
-    color: "#172033",
     letterSpacing: -0.3,
+  },
+
+  /* Login panel */
+
+  loginPanel: {
+    overflow: "hidden",
+    borderRadius: 28,
+    paddingHorizontal: 22,
+    paddingTop: 25,
+    paddingBottom: 24,
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.25)",
+    backgroundColor: "rgba(255,255,255,0.14)",
+  },
+
+  panelOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: "rgba(255,255,255,0.08)",
   },
 
   /* Header */
 
   header: {
-    marginBottom: 32,
+    marginBottom: 26,
   },
 
   title: {
-    fontSize: 32,
-    lineHeight: 38,
+    color: "#FFFFFF",
+    fontSize: 30,
+    lineHeight: 37,
     fontWeight: "800",
-    color: "#101828",
     letterSpacing: -0.8,
-    marginBottom: 10,
+    marginBottom: 9,
   },
 
   subtitle: {
-    fontSize: 15,
-    lineHeight: 23,
-    color: "#667085",
-    maxWidth: 330,
+    color: "rgba(255,255,255,0.76)",
+    fontSize: 14,
+    lineHeight: 21,
   },
 
   /* Form */
@@ -260,25 +327,25 @@ const styles = StyleSheet.create({
   },
 
   inputGroup: {
-    marginBottom: 20,
+    marginBottom: 18,
   },
 
   label: {
-    fontSize: 14,
+    color: "#FFFFFF",
+    fontSize: 13,
     fontWeight: "600",
-    color: "#344054",
     marginBottom: 8,
   },
 
   input: {
     height: 54,
     borderWidth: 1,
-    borderColor: "#D9E2EC",
-    borderRadius: 14,
-    backgroundColor: "#FFFFFF",
+    borderColor: "rgba(255,255,255,0.28)",
+    borderRadius: 15,
+    backgroundColor: "rgba(255,255,255,0.14)",
     paddingHorizontal: 16,
     fontSize: 16,
-    color: "#101828",
+    color: "#FFFFFF",
   },
 
   passwordHeader: {
@@ -288,37 +355,37 @@ const styles = StyleSheet.create({
   },
 
   showPassword: {
+    color: "#BFE0FF",
     fontSize: 13,
     fontWeight: "600",
-    color: "#3195F5",
   },
 
   forgotButton: {
     alignSelf: "flex-end",
-    marginTop: -4,
-    marginBottom: 24,
+    marginTop: -2,
+    marginBottom: 22,
   },
 
   forgotText: {
-    fontSize: 14,
+    color: "#C9E6FF",
+    fontSize: 13,
     fontWeight: "600",
-    color: "#3195F5",
   },
 
   loginButton: {
     height: 54,
-    borderRadius: 14,
+    borderRadius: 15,
     backgroundColor: "#3195F5",
     alignItems: "center",
     justifyContent: "center",
-    shadowColor: "#3195F5",
+    shadowColor: "#000000",
     shadowOffset: {
       width: 0,
       height: 6,
     },
-    shadowOpacity: 0.18,
+    shadowOpacity: 0.22,
     shadowRadius: 12,
-    elevation: 4,
+    elevation: 5,
   },
 
   buttonPressed: {
@@ -337,60 +404,60 @@ const styles = StyleSheet.create({
   dividerRow: {
     flexDirection: "row",
     alignItems: "center",
-    marginVertical: 28,
+    marginVertical: 24,
   },
 
   divider: {
     flex: 1,
     height: 1,
-    backgroundColor: "#E5EAF0",
+    backgroundColor: "rgba(255,255,255,0.20)",
   },
 
   dividerText: {
-    marginHorizontal: 12,
-    fontSize: 12,
-    color: "#98A2B3",
+    marginHorizontal: 11,
+    color: "rgba(255,255,255,0.60)",
+    fontSize: 11,
   },
 
   /* Social */
 
   socialRow: {
     flexDirection: "row",
-    gap: 12,
+    gap: 10,
   },
 
   socialButton: {
     flex: 1,
-    height: 52,
+    height: 50,
     borderWidth: 1,
-    borderColor: "#D9E2EC",
+    borderColor: "rgba(255,255,255,0.25)",
     borderRadius: 14,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: "rgba(255,255,255,0.12)",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    gap: 9,
+    gap: 8,
   },
 
   socialPressed: {
-    backgroundColor: "#F5F8FB",
+    backgroundColor: "rgba(255,255,255,0.20)",
   },
 
-  socialIcon: {
+  googleIcon: {
     fontSize: 17,
     fontWeight: "800",
-    color: "#4285F4",
+    color: "#FFFFFF",
   },
 
   appleIcon: {
-    fontSize: 15,
-    color: "#101828",
+    fontSize: 14,
+    color: "#FFFFFF",
   },
 
   socialText: {
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: "600",
-    color: "#344054",
+    color: "#FFFFFF",
   },
 
   /* Sign up */
@@ -399,28 +466,28 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 30,
+    marginTop: 25,
   },
 
   signupText: {
-    fontSize: 14,
-    color: "#667085",
+    fontSize: 13,
+    color: "rgba(255,255,255,0.70)",
   },
 
   signupLink: {
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: "700",
-    color: "#3195F5",
+    color: "#C9E6FF",
   },
 
   /* Footer */
 
   footer: {
     textAlign: "center",
-    fontSize: 11,
-    lineHeight: 17,
-    color: "#98A2B3",
-    marginTop: 28,
-    paddingHorizontal: 20,
+    fontSize: 10,
+    lineHeight: 16,
+    color: "rgba(255,255,255,0.55)",
+    marginTop: 20,
+    paddingHorizontal: 18,
   },
 });
