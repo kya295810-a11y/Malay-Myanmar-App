@@ -323,28 +323,28 @@ export default function HomeScreen() {
 
             <View style={styles.rateRow}>
 
-              <Text
-                style={styles.rate}
-                allowFontScaling={false}
-              >
-                1.00
-              </Text>
+  <Text
+    style={styles.rate}
+    allowFontScaling={false}
+  >
+    1 RM
+  </Text>
 
-              <Text
-                style={styles.equal}
-                allowFontScaling={false}
-              >
-                =
-              </Text>
+  <Text
+    style={styles.equal}
+    allowFontScaling={false}
+  >
+    =
+  </Text>
 
-              <Text
-                style={styles.rate}
-                allowFontScaling={false}
-              >
-                463.50
-              </Text>
+  <Text
+    style={styles.rate}
+    allowFontScaling={false}
+  >
+    1000 MMK
+  </Text>
 
-            </View>
+</View>
 
             <Text
               style={styles.updated}
