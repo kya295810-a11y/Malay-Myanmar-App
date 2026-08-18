@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { SymbolView } from 'expo-symbols';
+import Ionicons from '@expo/vector-icons/Ionicons';
 import {
   ImageBackground,
   Pressable,
@@ -85,12 +85,15 @@ export default function HomeScreen() {
 
       <View style={styles.container}>
 
-      <ScrollView
-      showsVerticalScrollIndicator={false}
-      contentContainerStyle={styles.content}
-      bounces={true}
-     alwaysBounceVertical={true}
-      >
+        <ScrollView
+  showsVerticalScrollIndicator={false}
+  contentContainerStyle={styles.content}
+  bounces={true}
+  alwaysBounceVertical={true}
+  nestedScrollEnabled={true}
+  directionalLockEnabled={true}
+  keyboardShouldPersistTaps="handled"
+>
 
           {/* =====================================================
               WELCOME
@@ -100,11 +103,17 @@ export default function HomeScreen() {
 
             <View style={styles.welcomeContainer}>
 
-              <Text style={styles.welcome}>
-                Wellcome
+              <Text
+                style={styles.welcome}
+                allowFontScaling={false}
+              >
+                Welcome
               </Text>
 
-              <Text style={styles.userName}>
+              <Text
+                style={styles.userName}
+                allowFontScaling={false}
+              >
                 {userName}
               </Text>
 
@@ -129,19 +138,10 @@ export default function HomeScreen() {
               ]}
             >
 
-              <SymbolView
-                name={
-                  isDark
-                    ? 'moon.fill'
-                    : 'sun.max.fill'
-                }
+              <Ionicons
+                name={isDark ? 'moon' : 'sunny'}
                 size={19}
-                tintColor={
-                  isDark
-                    ? '#FFFFFF'
-                    : '#111827'
-                }
-                weight="semibold"
+                color={isDark ? '#FFFFFF' : '#111827'}
               />
 
             </Pressable>
@@ -151,7 +151,6 @@ export default function HomeScreen() {
           {/* =====================================================
               KUALA LUMPUR
               
-              TOP OF IMAGE IS PRESERVED.
               NO CIRCLE.
               NO BUILDING LOGO.
           ===================================================== */}
@@ -178,11 +177,17 @@ export default function HomeScreen() {
 
               <View style={styles.locationText}>
 
-                <Text style={styles.locationTitle}>
+                <Text
+                  style={styles.locationTitle}
+                  allowFontScaling={false}
+                >
                   Kuala Lumpur
                 </Text>
 
-                <Text style={styles.locationSubtitle}>
+                <Text
+                  style={styles.locationSubtitle}
+                  allowFontScaling={false}
+                >
                   Malaysia 🇲🇾
                 </Text>
 
@@ -198,7 +203,10 @@ export default function HomeScreen() {
 
           <View style={styles.sectionHeader}>
 
-            <Text style={styles.sectionTitle}>
+            <Text
+              style={styles.sectionTitle}
+              allowFontScaling={false}
+            >
               Exchange Rate
             </Text>
 
@@ -207,7 +215,10 @@ export default function HomeScreen() {
               hitSlop={10}
             >
 
-              <Text style={styles.seeAll}>
+              <Text
+                style={styles.seeAll}
+                allowFontScaling={false}
+              >
                 See All
               </Text>
 
@@ -235,17 +246,26 @@ export default function HomeScreen() {
 
               <View style={styles.currencySide}>
 
-                <Text style={styles.flag}>
+                <Text
+                  style={styles.flag}
+                  allowFontScaling={false}
+                >
                   🇲🇾
                 </Text>
 
                 <View>
 
-                  <Text style={styles.currencyCode}>
+                  <Text
+                    style={styles.currencyCode}
+                    allowFontScaling={false}
+                  >
                     MYR
                   </Text>
 
-                  <Text style={styles.currencyName}>
+                  <Text
+                    style={styles.currencyName}
+                    allowFontScaling={false}
+                  >
                     Malaysian Ringgit
                   </Text>
 
@@ -255,7 +275,10 @@ export default function HomeScreen() {
 
               {/* ARROW */}
 
-              <Text style={styles.exchangeArrow}>
+              <Text
+                style={styles.exchangeArrow}
+                allowFontScaling={false}
+              >
                 →
               </Text>
 
@@ -263,17 +286,26 @@ export default function HomeScreen() {
 
               <View style={styles.currencySide}>
 
-                <Text style={styles.flag}>
+                <Text
+                  style={styles.flag}
+                  allowFontScaling={false}
+                >
                   🇲🇲
                 </Text>
 
                 <View>
 
-                  <Text style={styles.currencyCode}>
+                  <Text
+                    style={styles.currencyCode}
+                    allowFontScaling={false}
+                  >
                     MMK
                   </Text>
 
-                  <Text style={styles.currencyName}>
+                  <Text
+                    style={styles.currencyName}
+                    allowFontScaling={false}
+                  >
                     Myanmar Kyat
                   </Text>
 
@@ -291,21 +323,33 @@ export default function HomeScreen() {
 
             <View style={styles.rateRow}>
 
-              <Text style={styles.rate}>
+              <Text
+                style={styles.rate}
+                allowFontScaling={false}
+              >
                 1.00
               </Text>
 
-              <Text style={styles.equal}>
+              <Text
+                style={styles.equal}
+                allowFontScaling={false}
+              >
                 =
               </Text>
 
-              <Text style={styles.rate}>
+              <Text
+                style={styles.rate}
+                allowFontScaling={false}
+              >
                 463.50
               </Text>
 
             </View>
 
-            <Text style={styles.updated}>
+            <Text
+              style={styles.updated}
+              allowFontScaling={false}
+            >
               Last updated: 10:30 AM
             </Text>
 
@@ -322,7 +366,10 @@ export default function HomeScreen() {
             ]}
           >
 
-            <Text style={styles.sectionTitle}>
+            <Text
+              style={styles.sectionTitle}
+              allowFontScaling={false}
+            >
               Latest News
             </Text>
 
@@ -331,7 +378,10 @@ export default function HomeScreen() {
               hitSlop={10}
             >
 
-              <Text style={styles.seeAll}>
+              <Text
+                style={styles.seeAll}
+                allowFontScaling={false}
+              >
                 See All
               </Text>
 
@@ -353,39 +403,44 @@ export default function HomeScreen() {
 
             <View style={styles.newsIconBox}>
 
-              <SymbolView
-                name="newspaper.fill"
+              <Ionicons
+                name="newspaper"
                 size={21}
-                tintColor={colors.blue}
-                weight="medium"
+                color={colors.blue}
               />
 
             </View>
 
             <View style={styles.newsContent}>
 
-              <Text style={styles.newsCategory}>
+              <Text
+                style={styles.newsCategory}
+                allowFontScaling={false}
+              >
                 Malaysia
               </Text>
 
               <Text
                 style={styles.newsTitle}
                 numberOfLines={2}
+                allowFontScaling={false}
               >
                 Malaysia latest news and updates
               </Text>
 
-              <Text style={styles.newsTime}>
+              <Text
+                style={styles.newsTime}
+                allowFontScaling={false}
+              >
                 Today, 09:30 AM
               </Text>
 
             </View>
 
-            <SymbolView
-              name="chevron.right"
+            <Ionicons
+              name="chevron-forward"
               size={16}
-              tintColor={colors.muted}
-              weight="medium"
+              color={colors.muted}
             />
 
           </Pressable>
@@ -404,39 +459,44 @@ export default function HomeScreen() {
 
             <View style={styles.newsIconBox}>
 
-              <SymbolView
-                name="arrow.left.arrow.right"
+              <Ionicons
+                name="swap-horizontal"
                 size={21}
-                tintColor={colors.blue}
-                weight="medium"
+                color={colors.blue}
               />
 
             </View>
 
             <View style={styles.newsContent}>
 
-              <Text style={styles.newsCategory}>
+              <Text
+                style={styles.newsCategory}
+                allowFontScaling={false}
+              >
                 Exchange
               </Text>
 
               <Text
                 style={styles.newsTitle}
                 numberOfLines={2}
+                allowFontScaling={false}
               >
                 Ringgit strengthens against major currencies
               </Text>
 
-              <Text style={styles.newsTime}>
+              <Text
+                style={styles.newsTime}
+                allowFontScaling={false}
+              >
                 Today, 08:15 AM
               </Text>
 
             </View>
 
-            <SymbolView
-              name="chevron.right"
+            <Ionicons
+              name="chevron-forward"
               size={16}
-              tintColor={colors.muted}
-              weight="medium"
+              color={colors.muted}
             />
 
           </Pressable>
@@ -478,11 +538,12 @@ const createStyles = (
       backgroundColor: colors.background,
     },
 
-    content: {
-      paddingHorizontal: 20,
-      paddingTop: 8,
-      paddingBottom: 30,
-    },
+   content: {
+  paddingHorizontal: 20,
+  paddingTop: 8,
+  paddingBottom: 100,
+  flexGrow: 1,
+},
 
     /* =========================================================
        HEADER
@@ -506,6 +567,7 @@ const createStyles = (
       lineHeight: 27,
       fontWeight: '700',
       letterSpacing: -0.3,
+      includeFontPadding: false,
     },
 
     userName: {
@@ -514,6 +576,7 @@ const createStyles = (
       lineHeight: 22,
       fontWeight: '500',
       marginTop: 3,
+      includeFontPadding: false,
     },
 
     /* =========================================================
@@ -563,7 +626,7 @@ const createStyles = (
 
     /* =========================================================
        KUALA LUMPUR CARD
-       
+
        175px gives the image more vertical space.
     ========================================================= */
 
@@ -584,14 +647,12 @@ const createStyles = (
 
     /* =========================================================
        KL IMAGE
-       
+
        IMPORTANT:
        - No negative translateY.
        - Image is slightly taller than the card.
        - top: 0 keeps the ORIGINAL TOP of the image visible.
        - Bottom is allowed to crop.
-       
-       This makes the Twin Towers appear from the top.
     ========================================================= */
 
     locationImage: {
@@ -648,6 +709,8 @@ const createStyles = (
       },
 
       textShadowRadius: 4,
+
+      includeFontPadding: false,
     },
 
     locationSubtitle: {
@@ -667,6 +730,8 @@ const createStyles = (
       },
 
       textShadowRadius: 4,
+
+      includeFontPadding: false,
     },
 
     /* =========================================================
@@ -693,6 +758,8 @@ const createStyles = (
       fontWeight: '700',
 
       letterSpacing: -0.25,
+
+      includeFontPadding: false,
     },
 
     seeAll: {
@@ -700,7 +767,11 @@ const createStyles = (
 
       fontSize: 14,
 
+      lineHeight: 18,
+
       fontWeight: '600',
+
+      includeFontPadding: false,
     },
 
     /* =========================================================
@@ -744,7 +815,11 @@ const createStyles = (
     flag: {
       fontSize: 24,
 
+      lineHeight: 28,
+
       marginRight: 10,
+
+      includeFontPadding: false,
     },
 
     currencyCode: {
@@ -755,6 +830,8 @@ const createStyles = (
       lineHeight: 21,
 
       fontWeight: '700',
+
+      includeFontPadding: false,
     },
 
     currencyName: {
@@ -765,6 +842,8 @@ const createStyles = (
       lineHeight: 16,
 
       marginTop: 1,
+
+      includeFontPadding: false,
     },
 
     exchangeArrow: {
@@ -772,9 +851,13 @@ const createStyles = (
 
       fontSize: 28,
 
+      lineHeight: 32,
+
       fontWeight: '400',
 
       marginHorizontal: 7,
+
+      includeFontPadding: false,
     },
 
     divider: {
@@ -805,6 +888,8 @@ const createStyles = (
       fontWeight: '700',
 
       letterSpacing: -0.6,
+
+      includeFontPadding: false,
     },
 
     equal: {
@@ -817,6 +902,8 @@ const createStyles = (
       marginHorizontal: 9,
 
       fontWeight: '500',
+
+      includeFontPadding: false,
     },
 
     updated: {
@@ -826,7 +913,11 @@ const createStyles = (
 
       fontSize: 11,
 
+      lineHeight: 15,
+
       marginTop: 7,
+
+      includeFontPadding: false,
     },
 
     /* =========================================================
@@ -891,6 +982,8 @@ const createStyles = (
       fontWeight: '700',
 
       marginBottom: 2,
+
+      includeFontPadding: false,
     },
 
     newsTitle: {
@@ -901,6 +994,8 @@ const createStyles = (
       lineHeight: 18,
 
       fontWeight: '600',
+
+      includeFontPadding: false,
     },
 
     newsTime: {
@@ -911,6 +1006,8 @@ const createStyles = (
       lineHeight: 14,
 
       marginTop: 4,
+
+      includeFontPadding: false,
     },
 
     /* =========================================================
@@ -931,7 +1028,7 @@ const createStyles = (
        BOTTOM SPACE
     ========================================================= */
 
-   bottomSpace: {
-  height: 70,
-},
+    bottomSpace: {
+      height: 70,
+    },
   });

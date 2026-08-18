@@ -1,5 +1,5 @@
 import { Tabs } from 'expo-router';
-import { SymbolView } from 'expo-symbols';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 import { useTranslation } from '@/locales';
 import { useAppTheme } from '@/theme/provider';
@@ -39,82 +39,87 @@ export default function TabsLayout() {
         },
       }}
     >
+      {/* HOME */}
       <Tabs.Screen
         name="index"
         options={{
           title: t('navigation.home'),
-          tabBarIcon: ({ focused }) => (
-            <SymbolView
-              name={focused ? 'house.fill' : 'house'}
-              tintColor={focused ? '#000000' : '#666666'}
+
+          tabBarIcon: ({ focused, color }) => (
+            <Ionicons
+              name={focused ? 'home' : 'home-outline'}
+              color={color}
               size={23}
-              weight={focused ? 'semibold' : 'regular'}
             />
           ),
         }}
       />
 
+      {/* NEWS */}
       <Tabs.Screen
         name="news"
         options={{
           title: t('navigation.news'),
-          tabBarIcon: ({ focused }) => (
-            <SymbolView
-              name={focused ? 'newspaper.fill' : 'newspaper'}
-              tintColor={focused ? '#000000' : '#666666'}
+
+          tabBarIcon: ({ focused, color }) => (
+            <Ionicons
+              name={focused ? 'newspaper' : 'newspaper-outline'}
+              color={color}
               size={23}
-              weight={focused ? 'semibold' : 'regular'}
             />
           ),
         }}
       />
 
+      {/* EXCHANGE */}
       <Tabs.Screen
         name="exchange"
         options={{
           title: t('navigation.exchange'),
-          tabBarIcon: ({ focused }) => (
-            <SymbolView
-              name="arrow.left.arrow.right"
-              tintColor={focused ? '#000000' : '#666666'}
+
+          tabBarIcon: ({ color }) => (
+            <Ionicons
+              name="swap-horizontal"
+              color={color}
               size={23}
-              weight={focused ? 'semibold' : 'regular'}
             />
           ),
         }}
       />
 
+      {/* SERVICES */}
       <Tabs.Screen
         name="services"
         options={{
           title: t('navigation.services'),
-          tabBarIcon: ({ focused }) => (
-            <SymbolView
-              name={focused ? 'square.grid.2x2.fill' : 'square.grid.2x2'}
-              tintColor={focused ? '#000000' : '#666666'}
+
+          tabBarIcon: ({ focused, color }) => (
+            <Ionicons
+              name={focused ? 'grid' : 'grid-outline'}
+              color={color}
               size={23}
-              weight={focused ? 'semibold' : 'regular'}
             />
           ),
         }}
       />
 
+      {/* PROFILE */}
       <Tabs.Screen
         name="profile"
         options={{
           title: t('navigation.profile'),
-          tabBarIcon: ({ focused }) => (
-            <SymbolView
-              name={focused ? 'person.fill' : 'person'}
-              tintColor={focused ? '#000000' : '#666666'}
+
+          tabBarIcon: ({ focused, color }) => (
+            <Ionicons
+              name={focused ? 'person' : 'person-outline'}
+              color={color}
               size={23}
-              weight={focused ? 'semibold' : 'regular'}
             />
           ),
         }}
       />
 
-      {/* Gold is intentionally hidden from the bottom navigation */}
+      {/* GOLD - hidden from bottom navigation */}
       <Tabs.Screen
         name="gold"
         options={{

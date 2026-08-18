@@ -15,7 +15,7 @@ import { router, type Href } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 
-const LOGIN_BACKGROUND = require("../../../assets/images/login-bg.jpg");
+const LOGIN_BACKGROUND = require("../../assets/images/login-bg.jpg");
 
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
@@ -62,10 +62,20 @@ export default function LoginScreen() {
             {/* Brand */}
             <View style={styles.brandSection}>
               <View style={styles.logo}>
-                <Text style={styles.logoText}>M</Text>
+                <Text
+                  style={styles.logoText}
+                  allowFontScaling={false}
+                >
+                  M
+                </Text>
               </View>
 
-              <Text style={styles.brandName}>Malay MM</Text>
+              <Text
+                style={styles.brandName}
+                allowFontScaling={false}
+              >
+                Malay MM
+              </Text>
             </View>
 
             {/* Login panel */}
@@ -78,9 +88,17 @@ export default function LoginScreen() {
 
               {/* Header */}
               <View style={styles.header}>
-                <Text style={styles.title}>Welcome back</Text>
+                <Text
+                  style={styles.title}
+                  allowFontScaling={false}
+                >
+                  Welcome back
+                </Text>
 
-                <Text style={styles.subtitle}>
+                <Text
+                  style={styles.subtitle}
+                  allowFontScaling={false}
+                >
                   Sign in to continue with Malay MM.
                 </Text>
               </View>
@@ -89,7 +107,12 @@ export default function LoginScreen() {
               <View style={styles.form}>
                 {/* Email */}
                 <View style={styles.inputGroup}>
-                  <Text style={styles.label}>Email</Text>
+                  <Text
+                    style={styles.label}
+                    allowFontScaling={false}
+                  >
+                    Email
+                  </Text>
 
                   <TextInput
                     value={email}
@@ -100,19 +123,28 @@ export default function LoginScreen() {
                     autoCapitalize="none"
                     autoCorrect={false}
                     style={styles.input}
+                    allowFontScaling={false}
                   />
                 </View>
 
                 {/* Password */}
                 <View style={styles.inputGroup}>
                   <View style={styles.passwordHeader}>
-                    <Text style={styles.label}>Password</Text>
+                    <Text
+                      style={styles.label}
+                      allowFontScaling={false}
+                    >
+                      Password
+                    </Text>
 
                     <Pressable
                       onPress={() => setShowPassword(!showPassword)}
                       hitSlop={8}
                     >
-                      <Text style={styles.showPassword}>
+                      <Text
+                        style={styles.showPassword}
+                        allowFontScaling={false}
+                      >
                         {showPassword ? "Hide" : "Show"}
                       </Text>
                     </Pressable>
@@ -127,6 +159,7 @@ export default function LoginScreen() {
                     autoCapitalize="none"
                     autoCorrect={false}
                     style={styles.input}
+                    allowFontScaling={false}
                   />
                 </View>
 
@@ -138,7 +171,10 @@ export default function LoginScreen() {
                   style={styles.forgotButton}
                   hitSlop={8}
                 >
-                  <Text style={styles.forgotText}>
+                  <Text
+                    style={styles.forgotText}
+                    allowFontScaling={false}
+                  >
                     Forgot password?
                   </Text>
                 </Pressable>
@@ -151,7 +187,10 @@ export default function LoginScreen() {
                     pressed && styles.buttonPressed,
                   ]}
                 >
-                  <Text style={styles.loginButtonText}>
+                  <Text
+                    style={styles.loginButtonText}
+                    allowFontScaling={false}
+                  >
                     Log in
                   </Text>
                 </Pressable>
@@ -161,7 +200,10 @@ export default function LoginScreen() {
               <View style={styles.dividerRow}>
                 <View style={styles.divider} />
 
-                <Text style={styles.dividerText}>
+                <Text
+                  style={styles.dividerText}
+                  allowFontScaling={false}
+                >
                   or continue with
                 </Text>
 
@@ -176,8 +218,19 @@ export default function LoginScreen() {
                     pressed && styles.socialPressed,
                   ]}
                 >
-                  <Text style={styles.googleIcon}>G</Text>
-                  <Text style={styles.socialText}>Google</Text>
+                  <Text
+                    style={styles.googleIcon}
+                    allowFontScaling={false}
+                  >
+                    G
+                  </Text>
+
+                  <Text
+                    style={styles.socialText}
+                    allowFontScaling={false}
+                  >
+                    Google
+                  </Text>
                 </Pressable>
 
                 <Pressable
@@ -186,14 +239,28 @@ export default function LoginScreen() {
                     pressed && styles.socialPressed,
                   ]}
                 >
-                  <Text style={styles.appleIcon}>●</Text>
-                  <Text style={styles.socialText}>Apple</Text>
+                  <Text
+                    style={styles.appleIcon}
+                    allowFontScaling={false}
+                  >
+                    ●
+                  </Text>
+
+                  <Text
+                    style={styles.socialText}
+                    allowFontScaling={false}
+                  >
+                    Apple
+                  </Text>
                 </Pressable>
               </View>
 
               {/* Sign up */}
               <View style={styles.signupRow}>
-                <Text style={styles.signupText}>
+                <Text
+                  style={styles.signupText}
+                  allowFontScaling={false}
+                >
                   Don&apos;t have an account?
                 </Text>
 
@@ -201,7 +268,10 @@ export default function LoginScreen() {
                   onPress={() => router.push("/signup" as Href)}
                   hitSlop={8}
                 >
-                  <Text style={styles.signupLink}>
+                  <Text
+                    style={styles.signupLink}
+                    allowFontScaling={false}
+                  >
                     {" "}Sign up
                   </Text>
                 </Pressable>
@@ -209,7 +279,10 @@ export default function LoginScreen() {
             </BlurView>
 
             {/* Footer */}
-            <Text style={styles.footer}>
+            <Text
+              style={styles.footer}
+              allowFontScaling={false}
+            >
               By continuing, you agree to our Terms and Privacy Policy.
             </Text>
           </ScrollView>
@@ -225,21 +298,22 @@ const styles = StyleSheet.create({
     backgroundColor: "#071A31",
   },
 
-background: {
-  position: "absolute",
-  top: 0,
-  right: 0,
-  bottom: 0,
-  left: 0,
-},
- overlay: {
-  position: "absolute",
-  top: 0,
-  right: 0,
-  bottom: 0,
-  left: 0,
-  backgroundColor: "rgba(3, 18, 40, 0.48)",
-},
+  background: {
+    position: "absolute",
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
+  },
+
+  overlay: {
+    position: "absolute",
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
+    backgroundColor: "rgba(3, 18, 40, 0.48)",
+  },
 
   safeArea: {
     flex: 1,
@@ -278,14 +352,18 @@ background: {
   logoText: {
     color: "#FFFFFF",
     fontSize: 25,
+    lineHeight: 30,
     fontWeight: "800",
+    includeFontPadding: false,
   },
 
   brandName: {
     color: "#FFFFFF",
     fontSize: 18,
+    lineHeight: 22,
     fontWeight: "700",
     letterSpacing: -0.3,
+    includeFontPadding: false,
   },
 
   /* Login panel */
@@ -301,14 +379,14 @@ background: {
     backgroundColor: "rgba(255,255,255,0.14)",
   },
 
- panelOverlay: {
-  position: "absolute",
-  top: 0,
-  right: 0,
-  bottom: 0,
-  left: 0,
-  backgroundColor: "rgba(255,255,255,0.08)",
-},
+  panelOverlay: {
+    position: "absolute",
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
+    backgroundColor: "rgba(255,255,255,0.08)",
+  },
 
   /* Header */
 
@@ -323,12 +401,14 @@ background: {
     fontWeight: "800",
     letterSpacing: -0.8,
     marginBottom: 9,
+    includeFontPadding: false,
   },
 
   subtitle: {
-    color: "rgba(255,255,255,0.76)",
-    fontSize: 14,
-    lineHeight: 21,
+    color: "rgba(255,255,255,0.82)",
+    fontSize: 15,
+    lineHeight: 22,
+    includeFontPadding: false,
   },
 
   /* Form */
@@ -343,9 +423,11 @@ background: {
 
   label: {
     color: "#FFFFFF",
-    fontSize: 13,
+    fontSize: 14,
+    lineHeight: 18,
     fontWeight: "600",
     marginBottom: 8,
+    includeFontPadding: false,
   },
 
   input: {
@@ -356,7 +438,9 @@ background: {
     backgroundColor: "rgba(255,255,255,0.14)",
     paddingHorizontal: 16,
     fontSize: 16,
+    lineHeight: 20,
     color: "#FFFFFF",
+    includeFontPadding: false,
   },
 
   passwordHeader: {
@@ -367,8 +451,10 @@ background: {
 
   showPassword: {
     color: "#BFE0FF",
-    fontSize: 13,
+    fontSize: 14,
+    lineHeight: 18,
     fontWeight: "600",
+    includeFontPadding: false,
   },
 
   forgotButton: {
@@ -379,8 +465,10 @@ background: {
 
   forgotText: {
     color: "#C9E6FF",
-    fontSize: 13,
+    fontSize: 14,
+    lineHeight: 18,
     fontWeight: "600",
+    includeFontPadding: false,
   },
 
   loginButton: {
@@ -406,8 +494,10 @@ background: {
 
   loginButtonText: {
     color: "#FFFFFF",
-    fontSize: 16,
+    fontSize: 17,
+    lineHeight: 21,
     fontWeight: "700",
+    includeFontPadding: false,
   },
 
   /* Divider */
@@ -427,7 +517,9 @@ background: {
   dividerText: {
     marginHorizontal: 11,
     color: "rgba(255,255,255,0.60)",
-    fontSize: 11,
+    fontSize: 12,
+    lineHeight: 16,
+    includeFontPadding: false,
   },
 
   /* Social */
@@ -456,19 +548,25 @@ background: {
 
   googleIcon: {
     fontSize: 17,
+    lineHeight: 20,
     fontWeight: "800",
     color: "#FFFFFF",
+    includeFontPadding: false,
   },
 
   appleIcon: {
     fontSize: 14,
+    lineHeight: 18,
     color: "#FFFFFF",
+    includeFontPadding: false,
   },
 
   socialText: {
-    fontSize: 13,
+    fontSize: 14,
+    lineHeight: 18,
     fontWeight: "600",
     color: "#FFFFFF",
+    includeFontPadding: false,
   },
 
   /* Sign up */
@@ -481,24 +579,29 @@ background: {
   },
 
   signupText: {
-    fontSize: 13,
-    color: "rgba(255,255,255,0.70)",
+    fontSize: 14,
+    lineHeight: 18,
+    color: "rgba(255,255,255,0.76)",
+    includeFontPadding: false,
   },
 
   signupLink: {
-    fontSize: 13,
+    fontSize: 14,
+    lineHeight: 18,
     fontWeight: "700",
     color: "#C9E6FF",
+    includeFontPadding: false,
   },
 
   /* Footer */
 
   footer: {
     textAlign: "center",
-    fontSize: 10,
-    lineHeight: 16,
-    color: "rgba(255,255,255,0.55)",
+    fontSize: 11,
+    lineHeight: 17,
+    color: "rgba(255,255,255,0.60)",
     marginTop: 20,
     paddingHorizontal: 18,
+    includeFontPadding: false,
   },
 });
