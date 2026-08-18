@@ -1,8 +1,75 @@
 import { Tabs } from 'expo-router';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { Gesture, GestureDetector } from 'react-native-gesture-handler';
+import { runOnJS } from 'react-native-reanimated';
 
 import { useTranslation } from '@/locales';
 import { useAppTheme } from '@/theme/provider';
+
+const TAB_ORDER = [
+  'index',
+  'news',
+  'exchange',
+  'services',
+  'profile',
+] as const;
+
+function SwipeableTabScreen({
+  children,
+  route,
+  navigation,
+}: {
+  children: React.ReactNode;
+  route: { name: string };
+  navigation: {
+    jumpTo: (name: string) => void;
+  };
+}) {
+  const currentIndex = TAB_ORDER.indexOf(
+    route.name as (typeof TAB_ORDER)[number]
+  );
+
+  const goToTab = (direction: 'left' | 'right') => {
+    const nextIndex =
+      direction === 'left'
+        ? currentIndex + 1
+        : currentIndex - 1;
+
+    if (
+      nextIndex >= 0 &&
+      nextIndex < TAB_ORDER.length
+    ) {
+      navigation.jumpTo(TAB_ORDER[nextIndex]);
+    }
+  };
+
+  const swipeGesture = Gesture.Pan()
+    .activeOffsetX([-30, 30])
+    .failOffsetY([-20, 20])
+    .onEnd((event) => {
+      const { translationX, velocityX } = event;
+
+      const shouldSwipe =
+        Math.abs(translationX) > 70 ||
+        Math.abs(velocityX) > 500;
+
+      if (!shouldSwipe) {
+        return;
+      }
+
+      if (translationX < 0) {
+        runOnJS(goToTab)('left');
+      } else {
+        runOnJS(goToTab)('right');
+      }
+    });
+
+  return (
+    <GestureDetector gesture={swipeGesture}>
+      {children}
+    </GestureDetector>
+  );
+}
 
 export default function TabsLayout() {
   const { theme } = useAppTheme();
@@ -10,12 +77,24 @@ export default function TabsLayout() {
 
   return (
     <Tabs
+      screenLayout={({ children, route, navigation }) => (
+        <SwipeableTabScreen
+          route={route}
+          navigation={navigation}
+        >
+          {children}
+        </SwipeableTabScreen>
+      )}
+
       screenOptions={{
         headerShown: false,
 
         sceneStyle: {
           backgroundColor: theme.colors.background,
         },
+
+        // Smooth movement when switching tabs.
+        animation: 'shift',
 
         tabBarActiveTintColor: '#000000',
         tabBarInactiveTintColor: '#666666',
@@ -47,7 +126,11 @@ export default function TabsLayout() {
 
           tabBarIcon: ({ focused, color }) => (
             <Ionicons
-              name={focused ? 'home' : 'home-outline'}
+              name={
+                focused
+                  ? 'home'
+                  : 'home-outline'
+              }
               color={color}
               size={23}
             />
@@ -63,7 +146,11 @@ export default function TabsLayout() {
 
           tabBarIcon: ({ focused, color }) => (
             <Ionicons
-              name={focused ? 'newspaper' : 'newspaper-outline'}
+              name={
+                focused
+                  ? 'newspaper'
+                  : 'newspaper-outline'
+              }
               color={color}
               size={23}
             />
@@ -95,7 +182,11 @@ export default function TabsLayout() {
 
           tabBarIcon: ({ focused, color }) => (
             <Ionicons
-              name={focused ? 'grid' : 'grid-outline'}
+              name={
+                focused
+                  ? 'grid'
+                  : 'grid-outline'
+              }
               color={color}
               size={23}
             />
@@ -111,7 +202,11 @@ export default function TabsLayout() {
 
           tabBarIcon: ({ focused, color }) => (
             <Ionicons
-              name={focused ? 'person' : 'person-outline'}
+              name={
+                focused
+                  ? 'person'
+                  : 'person-outline'
+              }
               color={color}
               size={23}
             />
@@ -119,7 +214,7 @@ export default function TabsLayout() {
         }}
       />
 
-      {/* GOLD - hidden from bottom navigation */}
+      {/* GOLD - hidden */}
       <Tabs.Screen
         name="gold"
         options={{
