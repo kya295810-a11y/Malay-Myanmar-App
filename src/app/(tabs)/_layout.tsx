@@ -1,131 +1,220 @@
-import { Tabs } from 'expo-router';
+import { Tabs, router, usePathname } from 'expo-router';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import {
+  GestureResponderEvent,
+  PanResponder,
+  PanResponderGestureState,
+  View,
+} from 'react-native';
 
 import { useTranslation } from '@/locales';
 import { useAppTheme } from '@/theme/provider';
 
+const TAB_ROUTES = [
+  'index',
+  'news',
+  'exchange',
+  'services',
+  'profile',
+];
+
 export default function TabsLayout() {
   const { theme } = useAppTheme();
   const { t } = useTranslation();
+  const pathname = usePathname();
+
+  const currentTabIndex = TAB_ROUTES.findIndex((tab) => {
+    if (tab === 'index') {
+      return (
+        pathname === '/(tabs)' ||
+        pathname === '/(tabs)/' ||
+        pathname === '/'
+      );
+    }
+
+    return pathname.endsWith(`/${tab}`);
+  });
+
+  const activeIndex = currentTabIndex === -1 ? 0 : currentTabIndex;
+
+  const goToTab = (direction: 'left' | 'right') => {
+    let nextIndex = activeIndex;
+
+    if (direction === 'left') {
+      nextIndex = Math.min(activeIndex + 1, TAB_ROUTES.length - 1);
+    } else {
+      nextIndex = Math.max(activeIndex - 1, 0);
+    }
+
+    if (nextIndex === activeIndex) {
+      return;
+    }
+
+    const nextTab = TAB_ROUTES[nextIndex];
+
+    if (nextTab === 'index') {
+      router.replace('/(tabs)');
+    } else {
+      router.replace(`/(tabs)/${nextTab}` as any);
+    }
+  };
+
+  const panResponder = PanResponder.create({
+    onMoveShouldSetPanResponder: (
+      _event: GestureResponderEvent,
+      gestureState: PanResponderGestureState
+    ) => {
+      const { dx, dy } = gestureState;
+
+      // Only activate for a clear horizontal swipe.
+      return (
+        Math.abs(dx) > 30 &&
+        Math.abs(dx) > Math.abs(dy) * 1.3
+      );
+    },
+
+    onPanResponderRelease: (
+      _event: GestureResponderEvent,
+      gestureState: PanResponderGestureState
+    ) => {
+      const { dx, vx } = gestureState;
+
+      // Swipe left → next section
+      if (dx < -60 || vx < -0.5) {
+        goToTab('left');
+        return;
+      }
+
+      // Swipe right → previous section
+      if (dx > 60 || vx > 0.5) {
+        goToTab('right');
+      }
+    },
+  });
 
   return (
-    <Tabs
-      screenOptions={{
-        headerShown: false,
-
-        sceneStyle: {
-          backgroundColor: theme.colors.background,
-        },
-
-        tabBarActiveTintColor: '#000000',
-        tabBarInactiveTintColor: '#666666',
-
-        tabBarLabelStyle: {
-          fontSize: 11,
-          fontWeight: '500',
-          letterSpacing: -0.1,
-        },
-
-        tabBarItemStyle: {
-          paddingTop: 4,
-        },
-
-        tabBarStyle: {
-          backgroundColor: '#FFFFFF',
-          borderTopWidth: 0,
-          height: 78,
-          paddingTop: 7,
-          paddingBottom: 8,
-        },
-      }}
+    <View
+      style={{ flex: 1 }}
+      {...panResponder.panHandlers}
     >
-      {/* HOME */}
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: t('navigation.home'),
+      <Tabs
+        screenOptions={{
+          headerShown: false,
 
-          tabBarIcon: ({ focused, color }) => (
-            <Ionicons
-              name={focused ? 'home' : 'home-outline'}
-              color={color}
-              size={23}
-            />
-          ),
+          sceneStyle: {
+            backgroundColor: theme.colors.background,
+          },
+
+          tabBarActiveTintColor: '#000000',
+          tabBarInactiveTintColor: '#666666',
+
+          tabBarLabelStyle: {
+            fontSize: 11,
+            fontWeight: '500',
+            letterSpacing: -0.1,
+          },
+
+          tabBarItemStyle: {
+            paddingTop: 4,
+          },
+
+          tabBarStyle: {
+            backgroundColor: '#FFFFFF',
+            borderTopWidth: 0,
+            height: 78,
+            paddingTop: 7,
+            paddingBottom: 8,
+          },
         }}
-      />
+      >
+        {/* HOME */}
+        <Tabs.Screen
+          name="index"
+          options={{
+            title: t('navigation.home'),
 
-      {/* NEWS */}
-      <Tabs.Screen
-        name="news"
-        options={{
-          title: t('navigation.news'),
+            tabBarIcon: ({ focused, color }) => (
+              <Ionicons
+                name={focused ? 'home' : 'home-outline'}
+                color={color}
+                size={23}
+              />
+            ),
+          }}
+        />
 
-          tabBarIcon: ({ focused, color }) => (
-            <Ionicons
-              name={focused ? 'newspaper' : 'newspaper-outline'}
-              color={color}
-              size={23}
-            />
-          ),
-        }}
-      />
+        {/* NEWS */}
+        <Tabs.Screen
+          name="news"
+          options={{
+            title: t('navigation.news'),
 
-      {/* EXCHANGE */}
-      <Tabs.Screen
-        name="exchange"
-        options={{
-          title: t('navigation.exchange'),
+            tabBarIcon: ({ focused, color }) => (
+              <Ionicons
+                name={focused ? 'newspaper' : 'newspaper-outline'}
+                color={color}
+                size={23}
+              />
+            ),
+          }}
+        />
 
-          tabBarIcon: ({ color }) => (
-            <Ionicons
-              name="swap-horizontal"
-              color={color}
-              size={23}
-            />
-          ),
-        }}
-      />
+        {/* EXCHANGE */}
+        <Tabs.Screen
+          name="exchange"
+          options={{
+            title: t('navigation.exchange'),
 
-      {/* SERVICES */}
-      <Tabs.Screen
-        name="services"
-        options={{
-          title: t('navigation.services'),
+            tabBarIcon: ({ color }) => (
+              <Ionicons
+                name="swap-horizontal"
+                color={color}
+                size={23}
+              />
+            ),
+          }}
+        />
 
-          tabBarIcon: ({ focused, color }) => (
-            <Ionicons
-              name={focused ? 'grid' : 'grid-outline'}
-              color={color}
-              size={23}
-            />
-          ),
-        }}
-      />
+        {/* SERVICES */}
+        <Tabs.Screen
+          name="services"
+          options={{
+            title: t('navigation.services'),
 
-      {/* PROFILE */}
-      <Tabs.Screen
-        name="profile"
-        options={{
-          title: t('navigation.profile'),
+            tabBarIcon: ({ focused, color }) => (
+              <Ionicons
+                name={focused ? 'grid' : 'grid-outline'}
+                color={color}
+                size={23}
+              />
+            ),
+          }}
+        />
 
-          tabBarIcon: ({ focused, color }) => (
-            <Ionicons
-              name={focused ? 'person' : 'person-outline'}
-              color={color}
-              size={23}
-            />
-          ),
-        }}
-      />
+        {/* PROFILE */}
+        <Tabs.Screen
+          name="profile"
+          options={{
+            title: t('navigation.profile'),
 
-      {/* GOLD - hidden */}
-      <Tabs.Screen
-        name="gold"
-        options={{
-          href: null,
-        }}
-      />
-    </Tabs>
+            tabBarIcon: ({ focused, color }) => (
+              <Ionicons
+                name={focused ? 'person' : 'person-outline'}
+                color={color}
+                size={23}
+              />
+            ),
+          }}
+        />
+
+        {/* GOLD - hidden */}
+        <Tabs.Screen
+          name="gold"
+          options={{
+            href: null,
+          }}
+        />
+      </Tabs>
+    </View>
   );
 }

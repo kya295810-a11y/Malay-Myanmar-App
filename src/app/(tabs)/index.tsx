@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import {
   ImageBackground,
@@ -12,6 +12,10 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 import { useRouter } from 'expo-router';
 
+import { useAppTheme } from '@/theme/provider';
+import { useSettingsStore } from '@/store/settings-store';
+import type { ThemeColors } from '@/theme/types';
+
 /* =============================================================
    KUALA LUMPUR IMAGES
 ============================================================= */
@@ -20,58 +24,53 @@ const KL_DAY = require('../../../assets/images/kl-day.png');
 const KL_NIGHT = require('../../../assets/images/kl-night.png');
 
 /* =============================================================
-   LIGHT THEME
-============================================================= */
-
-const LIGHT = {
-  background: '#F4F6F8',
-  surface: '#FFFFFF',
-  navy: '#172F5F',
-  navyLight: '#24498A',
-  text: '#17263D',
-  muted: '#6B7C93',
-  blue: '#087CFF',
-  border: '#D9E0E8',
-  soft: '#F4F7FA',
-};
-
-/* =============================================================
-   DARK THEME
-============================================================= */
-
-const DARK = {
-  background: '#0B111A',
-  surface: '#121A26',
-  navy: '#172F5F',
-  navyLight: '#24498A',
-  text: '#F5F7FA',
-  muted: '#94A3B8',
-  blue: '#3B8DFF',
-  border: '#263447',
-  soft: '#192332',
-};
-
-/* =============================================================
    HOME SCREEN
 ============================================================= */
 
 export default function HomeScreen() {
   const router = useRouter();
 
-  const [isDark, setIsDark] = useState(false);
+  const { theme } = useAppTheme();
 
-  const colors = isDark ? DARK : LIGHT;
+  /*
+   * Read the current global theme preference.
+   *
+   * The actual resolved light/dark state comes from
+   * AppThemeProvider through theme.isDark.
+   */
+  const themePreference = useSettingsStore(
+    (state) => state.themePreference,
+  );
 
   const userName = 'Kyaw San Lin';
 
-  const styles = createStyles(colors);
+  const styles = createStyles(theme.colors);
 
-  /* =========================================================
-     THEME TOGGLE
-  ========================================================= */
+  /* ===========================================================
+     GLOBAL THEME TOGGLE
+  =========================================================== */
 
   const toggleTheme = () => {
-    setIsDark((current) => !current);
+    /*
+     * We intentionally set an explicit preference instead
+     * of maintaining a separate local isDark state.
+     *
+     * This means:
+     *
+     * Home
+     *   ↓
+     * settings-store
+     *   ↓
+     * AppThemeProvider
+     *   ↓
+     * theme
+     *   ↓
+     * News / Exchange / Services / Profile
+     */
+
+    useSettingsStore.setState({
+      themePreference: theme.isDark ? 'light' : 'dark',
+    });
   };
 
   return (
@@ -80,24 +79,28 @@ export default function HomeScreen() {
       edges={['top']}
     >
       <StatusBar
-        style={isDark ? 'light' : 'dark'}
+        style={theme.statusBarStyle}
       />
 
       <View style={styles.container}>
 
-        <ScrollView
-  showsVerticalScrollIndicator={false}
-  contentContainerStyle={styles.content}
-  bounces={true}
-  alwaysBounceVertical={true}
-  nestedScrollEnabled={true}
-  directionalLockEnabled={true}
-  keyboardShouldPersistTaps="handled"
->
+        {/* =====================================================
+            MAIN SCROLL
+        ===================================================== */}
 
-          {/* =====================================================
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.content}
+          bounces={true}
+          alwaysBounceVertical={true}
+          nestedScrollEnabled={true}
+          directionalLockEnabled={true}
+          keyboardShouldPersistTaps="handled"
+        >
+
+          {/* ===================================================
               WELCOME
-          ===================================================== */}
+          =================================================== */}
 
           <View style={styles.header}>
 
@@ -127,36 +130,44 @@ export default function HomeScreen() {
               onPress={toggleTheme}
               accessibilityRole="button"
               accessibilityLabel={
-                isDark
+                theme.isDark
                   ? 'Switch to light mode'
                   : 'Switch to dark mode'
               }
               style={({ pressed }) => [
                 styles.themeButton,
-                isDark && styles.themeButtonDark,
                 pressed && styles.pressed,
               ]}
             >
 
               <Ionicons
-                name={isDark ? 'moon' : 'sunny'}
+                name={
+                  theme.isDark
+                    ? 'moon'
+                    : 'sunny'
+                }
                 size={19}
-                color={isDark ? '#FFFFFF' : '#111827'}
+                color={
+                  theme.isDark
+                    ? '#FFFFFF'
+                    : theme.colors.text
+                }
               />
 
             </Pressable>
 
           </View>
 
-          {/* =====================================================
+          {/* ===================================================
               KUALA LUMPUR
-              
-              NO CIRCLE.
-              NO BUILDING LOGO.
-          ===================================================== */}
+          =================================================== */}
 
           <ImageBackground
-            source={isDark ? KL_NIGHT : KL_DAY}
+            source={
+              theme.isDark
+                ? KL_NIGHT
+                : KL_DAY
+            }
             style={styles.locationCard}
             imageStyle={styles.locationImage}
             resizeMode="cover"
@@ -167,13 +178,12 @@ export default function HomeScreen() {
             <View
               style={[
                 styles.locationOverlay,
-                isDark && styles.locationOverlayDark,
+                theme.isDark &&
+                  styles.locationOverlayDark,
               ]}
             >
 
-              {/* =================================================
-                  LOCATION TEXT
-              ================================================= */}
+              {/* LOCATION TEXT */}
 
               <View style={styles.locationText}>
 
@@ -197,9 +207,9 @@ export default function HomeScreen() {
 
           </ImageBackground>
 
-          {/* =====================================================
+          {/* ===================================================
               EXCHANGE RATE HEADER
-          ===================================================== */}
+          =================================================== */}
 
           <View style={styles.sectionHeader}>
 
@@ -226,9 +236,9 @@ export default function HomeScreen() {
 
           </View>
 
-          {/* =====================================================
+          {/* ===================================================
               EXCHANGE RATE CARD
-          ===================================================== */}
+          =================================================== */}
 
           <Pressable
             onPress={() => router.push('/exchange')}
@@ -323,28 +333,28 @@ export default function HomeScreen() {
 
             <View style={styles.rateRow}>
 
-  <Text
-    style={styles.rate}
-    allowFontScaling={false}
-  >
-    1 RM
-  </Text>
+              <Text
+                style={styles.rate}
+                allowFontScaling={false}
+              >
+                1 RM
+              </Text>
 
-  <Text
-    style={styles.equal}
-    allowFontScaling={false}
-  >
-    =
-  </Text>
+              <Text
+                style={styles.equal}
+                allowFontScaling={false}
+              >
+                =
+              </Text>
 
-  <Text
-    style={styles.rate}
-    allowFontScaling={false}
-  >
-    1000 MMK
-  </Text>
+              <Text
+                style={styles.rate}
+                allowFontScaling={false}
+              >
+                1000 MMK
+              </Text>
 
-</View>
+            </View>
 
             <Text
               style={styles.updated}
@@ -355,9 +365,9 @@ export default function HomeScreen() {
 
           </Pressable>
 
-          {/* =====================================================
+          {/* ===================================================
               LATEST NEWS HEADER
-          ===================================================== */}
+          =================================================== */}
 
           <View
             style={[
@@ -389,9 +399,9 @@ export default function HomeScreen() {
 
           </View>
 
-          {/* =====================================================
+          {/* ===================================================
               NEWS CARD 1
-          ===================================================== */}
+          =================================================== */}
 
           <Pressable
             onPress={() => router.push('/news')}
@@ -406,7 +416,7 @@ export default function HomeScreen() {
               <Ionicons
                 name="newspaper"
                 size={21}
-                color={colors.blue}
+                color={theme.colors.primary}
               />
 
             </View>
@@ -440,14 +450,14 @@ export default function HomeScreen() {
             <Ionicons
               name="chevron-forward"
               size={16}
-              color={colors.muted}
+              color={theme.colors.textMuted}
             />
 
           </Pressable>
 
-          {/* =====================================================
+          {/* ===================================================
               NEWS CARD 2
-          ===================================================== */}
+          =================================================== */}
 
           <Pressable
             onPress={() => router.push('/exchange')}
@@ -462,7 +472,7 @@ export default function HomeScreen() {
               <Ionicons
                 name="swap-horizontal"
                 size={21}
-                color={colors.blue}
+                color={theme.colors.primary}
               />
 
             </View>
@@ -496,21 +506,20 @@ export default function HomeScreen() {
             <Ionicons
               name="chevron-forward"
               size={16}
-              color={colors.muted}
+              color={theme.colors.textMuted}
             />
 
           </Pressable>
 
-          {/* =====================================================
+          {/* ===================================================
               BOTTOM SPACE
-          ===================================================== */}
+          =================================================== */}
 
           <View style={styles.bottomSpace} />
 
         </ScrollView>
 
       </View>
-
     </SafeAreaView>
   );
 }
@@ -520,7 +529,7 @@ export default function HomeScreen() {
 ============================================================= */
 
 const createStyles = (
-  colors: typeof LIGHT,
+  colors: ThemeColors,
 ) =>
   StyleSheet.create({
 
@@ -538,12 +547,12 @@ const createStyles = (
       backgroundColor: colors.background,
     },
 
-   content: {
-  paddingHorizontal: 20,
-  paddingTop: 8,
-  paddingBottom: 100,
-  flexGrow: 1,
-},
+    content: {
+      paddingHorizontal: 20,
+      paddingTop: 8,
+      paddingBottom: 100,
+      flexGrow: 1,
+    },
 
     /* =========================================================
        HEADER
@@ -563,19 +572,27 @@ const createStyles = (
 
     welcome: {
       color: colors.text,
+
       fontSize: 21,
       lineHeight: 27,
+
       fontWeight: '700',
+
       letterSpacing: -0.3,
+
       includeFontPadding: false,
     },
 
     userName: {
       color: colors.text,
+
       fontSize: 16,
       lineHeight: 22,
+
       fontWeight: '500',
+
       marginTop: 3,
+
       includeFontPadding: false,
     },
 
@@ -586,6 +603,7 @@ const createStyles = (
     themeButton: {
       width: 44,
       height: 44,
+
       borderRadius: 22,
 
       backgroundColor: colors.surface,
@@ -609,11 +627,6 @@ const createStyles = (
       elevation: 3,
     },
 
-    themeButtonDark: {
-      backgroundColor: '#17212F',
-      borderColor: '#334155',
-    },
-
     pressed: {
       opacity: 0.7,
 
@@ -626,8 +639,6 @@ const createStyles = (
 
     /* =========================================================
        KUALA LUMPUR CARD
-
-       175px gives the image more vertical space.
     ========================================================= */
 
     locationCard: {
@@ -640,20 +651,11 @@ const createStyles = (
       marginBottom: 34,
 
       borderWidth: 1,
-      borderColor: colors.navyLight,
 
-      backgroundColor: colors.navy,
+      borderColor: colors.border,
+
+      backgroundColor: colors.surface,
     },
-
-    /* =========================================================
-       KL IMAGE
-
-       IMPORTANT:
-       - No negative translateY.
-       - Image is slightly taller than the card.
-       - top: 0 keeps the ORIGINAL TOP of the image visible.
-       - Bottom is allowed to crop.
-    ========================================================= */
 
     locationImage: {
       borderRadius: 22,
@@ -662,6 +664,7 @@ const createStyles = (
       height: '125%',
 
       position: 'absolute',
+
       top: 0,
       left: 0,
     },
@@ -673,11 +676,13 @@ const createStyles = (
     locationOverlay: {
       flex: 1,
 
-      backgroundColor: 'rgba(13, 37, 78, 0.08)',
+      backgroundColor:
+        'rgba(13, 37, 78, 0.08)',
     },
 
     locationOverlayDark: {
-      backgroundColor: 'rgba(3, 12, 30, 0.16)',
+      backgroundColor:
+        'rgba(3, 12, 30, 0.34)',
     },
 
     /* =========================================================
@@ -696,12 +701,12 @@ const createStyles = (
       color: '#FFFFFF',
 
       fontSize: 21,
-
       lineHeight: 26,
 
       fontWeight: '700',
 
-      textShadowColor: 'rgba(0, 0, 0, 0.55)',
+      textShadowColor:
+        'rgba(0, 0, 0, 0.55)',
 
       textShadowOffset: {
         width: 0,
@@ -717,12 +722,12 @@ const createStyles = (
       color: '#F1F5F9',
 
       fontSize: 15,
-
       lineHeight: 21,
 
       marginTop: 1,
 
-      textShadowColor: 'rgba(0, 0, 0, 0.55)',
+      textShadowColor:
+        'rgba(0, 0, 0, 0.55)',
 
       textShadowOffset: {
         width: 0,
@@ -752,7 +757,6 @@ const createStyles = (
       color: colors.text,
 
       fontSize: 20,
-
       lineHeight: 26,
 
       fontWeight: '700',
@@ -763,10 +767,9 @@ const createStyles = (
     },
 
     seeAll: {
-      color: colors.blue,
+      color: colors.primary,
 
       fontSize: 14,
-
       lineHeight: 18,
 
       fontWeight: '600',
@@ -835,7 +838,7 @@ const createStyles = (
     },
 
     currencyName: {
-      color: colors.muted,
+      color: colors.textMuted,
 
       fontSize: 11,
 
@@ -893,7 +896,7 @@ const createStyles = (
     },
 
     equal: {
-      color: colors.muted,
+      color: colors.textMuted,
 
       fontSize: 25,
 
@@ -907,7 +910,7 @@ const createStyles = (
     },
 
     updated: {
-      color: colors.muted,
+      color: colors.textMuted,
 
       textAlign: 'center',
 
@@ -952,15 +955,13 @@ const createStyles = (
 
     newsIconBox: {
       width: 52,
-
       height: 52,
 
       borderRadius: 15,
 
-      backgroundColor: colors.soft,
+      backgroundColor: colors.primarySoft,
 
       alignItems: 'center',
-
       justifyContent: 'center',
 
       marginRight: 12,
@@ -973,10 +974,9 @@ const createStyles = (
     },
 
     newsCategory: {
-      color: colors.blue,
+      color: colors.primary,
 
       fontSize: 11,
-
       lineHeight: 15,
 
       fontWeight: '700',
@@ -990,7 +990,6 @@ const createStyles = (
       color: colors.text,
 
       fontSize: 14,
-
       lineHeight: 18,
 
       fontWeight: '600',
@@ -999,10 +998,9 @@ const createStyles = (
     },
 
     newsTime: {
-      color: colors.muted,
+      color: colors.textMuted,
 
       fontSize: 10,
-
       lineHeight: 14,
 
       marginTop: 4,

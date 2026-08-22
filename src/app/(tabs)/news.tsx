@@ -12,6 +12,9 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 
+import { useAppTheme } from '@/theme/provider';
+import type { ThemeColors } from '@/theme/types';
+
 /* ============================================================
    TYPES
 ============================================================ */
@@ -30,7 +33,7 @@ type NewsItem = {
 /* ============================================================
    TEMPORARY NEWS DATA
    ------------------------------------------------------------
-   Later this will come from the ADMIN / DATABASE.
+   Later this will come from ADMIN / DATABASE.
    Maximum 10 latest news items.
 ============================================================ */
 
@@ -144,18 +147,19 @@ const NEWS_DATA: NewsItem[] = [
 export default function NewsScreen() {
   const { width, height } = useWindowDimensions();
 
-  /*
-   * Responsive image height.
-   *
-   * Larger phones:
-   * 140–150px image
-   *
-   * Smaller phones:
-   * 108–120px image
-   *
-   * This helps keep roughly 3 cards visible initially
-   * on both iOS and Android.
-   */
+  /* ==========================================================
+     GLOBAL THEME
+     ----------------------------------------------------------
+     Uses the same theme provider as Home.
+  ========================================================== */
+
+  const { theme } = useAppTheme();
+
+  const styles = createStyles(theme.colors);
+
+  /* ==========================================================
+     RESPONSIVE IMAGE HEIGHT
+  ========================================================== */
 
   const imageHeight =
     height <= 700
@@ -166,8 +170,7 @@ export default function NewsScreen() {
 
   const horizontalPadding = 18;
 
-  const contentWidth =
-    width - horizontalPadding * 2;
+  const contentWidth = width - horizontalPadding * 2;
 
   /* ==========================================================
      NEWS CARD
@@ -180,7 +183,10 @@ export default function NewsScreen() {
   }) => {
     return (
       <Pressable
-        style={styles.newsCard}
+        style={({ pressed }) => [
+          styles.newsCard,
+          pressed && styles.cardPressed,
+        ]}
         onPress={() => {}}
       >
         {/* ====================================================
@@ -200,8 +206,6 @@ export default function NewsScreen() {
             style={styles.newsImage}
             resizeMode="cover"
           />
-
-          {/* IMAGE OVERLAY */}
 
           <View style={styles.imageOverlay} />
 
@@ -249,9 +253,6 @@ export default function NewsScreen() {
         ==================================================== */}
 
         <View style={styles.newsContent}>
-
-          {/* TITLE */}
-
           <Text
             style={styles.newsTitle}
             numberOfLines={3}
@@ -264,12 +265,11 @@ export default function NewsScreen() {
           {/* META */}
 
           <View style={styles.metaRow}>
-
             <View style={styles.timeContainer}>
               <Ionicons
                 name="time-outline"
                 size={12}
-                color="#8A96A6"
+                color={theme.colors.textMuted}
               />
 
               <Text
@@ -286,7 +286,7 @@ export default function NewsScreen() {
                 <Ionicons
                   name="videocam-outline"
                   size={12}
-                  color="#087CFF"
+                  color={theme.colors.primary}
                 />
 
                 <Text
@@ -297,7 +297,6 @@ export default function NewsScreen() {
                 </Text>
               </View>
             )}
-
           </View>
         </View>
       </Pressable>
@@ -313,18 +312,16 @@ export default function NewsScreen() {
       style={styles.safeArea}
       edges={['top']}
     >
-      <StatusBar style="dark" />
+      {/* GLOBAL STATUS BAR */}
+
+      <StatusBar style={theme.statusBarStyle} />
 
       <View style={styles.container}>
-
         {/* ====================================================
             HEADER
         ==================================================== */}
 
         <View style={styles.header}>
-
-          {/* LEFT */}
-
           <Text
             style={styles.title}
             allowFontScaling={false}
@@ -332,51 +329,50 @@ export default function NewsScreen() {
             News
           </Text>
 
-          {/* RIGHT */}
-
           <View style={styles.headerActions}>
-
             {/* SEARCH */}
 
             <Pressable
-              style={styles.headerButton}
+              style={({ pressed }) => [
+                styles.headerButton,
+                pressed && styles.buttonPressed,
+              ]}
               hitSlop={6}
               onPress={() => {}}
             >
               <Ionicons
                 name="search-outline"
                 size={21}
-                color="#17263D"
+                color={theme.colors.text}
               />
             </Pressable>
 
             {/* NOTIFICATION */}
 
             <Pressable
-              style={styles.headerButton}
+              style={({ pressed }) => [
+                styles.headerButton,
+                pressed && styles.buttonPressed,
+              ]}
               hitSlop={6}
               onPress={() => {}}
             >
               <Ionicons
                 name="notifications-outline"
                 size={21}
-                color="#17263D"
+                color={theme.colors.text}
               />
 
-              <View
-                style={styles.notificationDot}
-              />
+              <View style={styles.notificationDot} />
             </Pressable>
-
           </View>
         </View>
 
         {/* ====================================================
-            ALL NEWS
+            ALL NEWS HEADER
         ==================================================== */}
 
         <View style={styles.sectionHeader}>
-
           <Text
             style={styles.sectionTitle}
             allowFontScaling={false}
@@ -390,14 +386,10 @@ export default function NewsScreen() {
           >
             Latest
           </Text>
-
         </View>
 
         {/* ====================================================
-            VERTICAL NEWS LIST
-            ----------------------------------------------------
-            ONLY UP / DOWN SWIPE.
-            NO HORIZONTAL SWIPE.
+            NEWS LIST
         ==================================================== */}
 
         <FlatList
@@ -416,7 +408,6 @@ export default function NewsScreen() {
             },
           ]}
         />
-
       </View>
     </SafeAreaView>
   );
@@ -424,371 +415,313 @@ export default function NewsScreen() {
 
 /* ============================================================
    STYLES
+   ------------------------------------------------------------
+   All light/dark colors come from ThemeColors.
 ============================================================ */
 
-const styles = StyleSheet.create({
+const createStyles = (colors: ThemeColors) =>
+  StyleSheet.create({
+    /* ========================================================
+       SCREEN
+    ======================================================== */
 
-  /* ==========================================================
-     SCREEN
-  ========================================================== */
-
-  safeArea: {
-    flex: 1,
-    backgroundColor: '#F5F7FA',
-  },
-
-  container: {
-    flex: 1,
-    backgroundColor: '#F5F7FA',
-    paddingHorizontal: 18,
-  },
-
-  /* ==========================================================
-     HEADER
-  ========================================================== */
-
-  header: {
-    height: 58,
-
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-
-    paddingTop: 3,
-
-    marginBottom: 8,
-  },
-
-  title: {
-    color: '#14233B',
-
-    fontSize: 30,
-    lineHeight: 36,
-
-    fontWeight: '800',
-
-    letterSpacing: -0.9,
-
-    includeFontPadding: false,
-  },
-
-  headerActions: {
-    flexDirection: 'row',
-    alignItems: 'center',
-
-    gap: 9,
-  },
-
-  headerButton: {
-    width: 44,
-    height: 44,
-
-    borderRadius: 22,
-
-    backgroundColor: '#FFFFFF',
-
-    alignItems: 'center',
-    justifyContent: 'center',
-
-    borderWidth: 1,
-    borderColor: '#E3E8EF',
-
-    shadowColor: '#17263D',
-
-    shadowOffset: {
-      width: 0,
-      height: 3,
+    safeArea: {
+      flex: 1,
+      backgroundColor: colors.background,
     },
 
-    shadowOpacity: 0.06,
-
-    shadowRadius: 8,
-
-    elevation: 2,
-  },
-
-  notificationDot: {
-    position: 'absolute',
-
-    top: 9,
-    right: 10,
-
-    width: 6,
-    height: 6,
-
-    borderRadius: 3,
-
-    backgroundColor: '#087CFF',
-  },
-
-  /* ==========================================================
-     SECTION HEADER
-  ========================================================== */
-
-  sectionHeader: {
-    height: 35,
-
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-
-    marginBottom: 7,
-  },
-
-  sectionTitle: {
-    color: '#14233B',
-
-    fontSize: 21,
-    lineHeight: 27,
-
-    fontWeight: '700',
-
-    letterSpacing: -0.35,
-
-    includeFontPadding: false,
-  },
-
-  latestText: {
-    color: '#087CFF',
-
-    fontSize: 11,
-    lineHeight: 15,
-
-    fontWeight: '700',
-
-    includeFontPadding: false,
-  },
-
-  /* ==========================================================
-     LIST
-  ========================================================== */
-
-  listContent: {
-    paddingTop: 1,
-    paddingBottom: 14,
-  },
-
-  /* ==========================================================
-     NEWS CARD
-  ========================================================== */
-
-  newsCard: {
-    width: '100%',
-
-    backgroundColor: '#FFFFFF',
-
-    borderRadius: 20,
-
-    borderWidth: 1,
-    borderColor: '#E2E8F0',
-
-    overflow: 'hidden',
-
-    marginBottom: 11,
-
-    shadowColor: '#17263D',
-
-    shadowOffset: {
-      width: 0,
-      height: 4,
+    container: {
+      flex: 1,
+      backgroundColor: colors.background,
+      paddingHorizontal: 18,
     },
 
-    shadowOpacity: 0.065,
-
-    shadowRadius: 10,
-
-    elevation: 2,
-  },
-
-  /* ==========================================================
-     IMAGE
-  ========================================================== */
-
-  imageContainer: {
-    width: '100%',
-
-    backgroundColor: '#E8EDF3',
-
-    position: 'relative',
-
-    overflow: 'hidden',
-  },
-
-  newsImage: {
-    width: '100%',
-    height: '100%',
-  },
-
-  imageOverlay: {
-    position: 'absolute',
-
-    left: 0,
-    right: 0,
-    bottom: 0,
-
-    height: 70,
-
-    backgroundColor: 'rgba(0,0,0,0.18)',
-  },
-
-  /* ==========================================================
-     CATEGORY ON IMAGE
-  ========================================================== */
-
-  imageCategory: {
-    position: 'absolute',
-
-    left: 12,
-    bottom: 11,
-
-    paddingHorizontal: 9,
-    paddingVertical: 5,
-
-    borderRadius: 10,
-
-    backgroundColor: 'rgba(255,255,255,0.94)',
-  },
-
-  imageCategoryText: {
-    color: '#087CFF',
-
-    fontSize: 10,
-    lineHeight: 13,
-
-    fontWeight: '700',
-
-    includeFontPadding: false,
-  },
-
-  /* ==========================================================
-     VIDEO BUTTON
-  ========================================================== */
-
-  videoButton: {
-    position: 'absolute',
-
-    top: '50%',
-    left: '50%',
-
-    width: 48,
-    height: 48,
-
-    marginLeft: -24,
-    marginTop: -24,
-
-    borderRadius: 24,
-
-    backgroundColor: 'rgba(10,23,42,0.82)',
-
-    alignItems: 'center',
-    justifyContent: 'center',
-
-    paddingLeft: 2,
-
-    borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.35)',
-  },
-
-  /* ==========================================================
-     IMAGE BOOKMARK
-  ========================================================== */
-
-  imageBookmark: {
-    position: 'absolute',
-
-    top: 11,
-    right: 11,
-
-    width: 36,
-    height: 36,
-
-    borderRadius: 18,
-
-    backgroundColor: 'rgba(10,23,42,0.48)',
-
-    alignItems: 'center',
-    justifyContent: 'center',
-
-    borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.25)',
-  },
-
-  /* ==========================================================
-     CONTENT
-  ========================================================== */
-
-  newsContent: {
-    paddingHorizontal: 14,
-    paddingTop: 11,
-    paddingBottom: 11,
-  },
-
-  newsTitle: {
-    color: '#17263D',
-
-    fontSize: 16,
-    lineHeight: 21,
-
-    fontWeight: '700',
-
-    letterSpacing: -0.15,
-
-    includeFontPadding: false,
-  },
-
-  /* ==========================================================
-     META
-  ========================================================== */
-
-  metaRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-
-    marginTop: 8,
-
-    minHeight: 17,
-  },
-
-  timeContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-
-  time: {
-    color: '#8A96A6',
-
-    fontSize: 10,
-    lineHeight: 14,
-
-    fontWeight: '500',
-
-    marginLeft: 4,
-
-    includeFontPadding: false,
-  },
-
-  videoLabel: {
-    flexDirection: 'row',
-    alignItems: 'center',
-
-    marginLeft: 10,
-
-    paddingLeft: 10,
-
-    borderLeftWidth: 1,
-    borderLeftColor: '#E0E6EE',
-  },
-
-  videoLabelText: {
-    color: '#087CFF',
-
-    fontSize: 10,
-    lineHeight: 14,
-
-    fontWeight: '600',
-
-    marginLeft: 4,
-
-    includeFontPadding: false,
-  },
-});
+    /* ========================================================
+       HEADER
+    ======================================================== */
+
+    header: {
+      height: 58,
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      paddingTop: 3,
+      marginBottom: 8,
+    },
+
+    title: {
+      color: colors.text,
+      fontSize: 30,
+      lineHeight: 36,
+      fontWeight: '800',
+      letterSpacing: -0.9,
+      includeFontPadding: false,
+    },
+
+    headerActions: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 9,
+    },
+
+    headerButton: {
+      width: 44,
+      height: 44,
+      borderRadius: 22,
+      backgroundColor: colors.surface,
+      alignItems: 'center',
+      justifyContent: 'center',
+      borderWidth: 1,
+      borderColor: colors.border,
+
+      shadowColor: '#000000',
+      shadowOffset: {
+        width: 0,
+        height: 3,
+      },
+      shadowOpacity: 0.06,
+      shadowRadius: 8,
+      elevation: 2,
+    },
+
+    buttonPressed: {
+      opacity: 0.7,
+      transform: [
+        {
+          scale: 0.94,
+        },
+      ],
+    },
+
+    notificationDot: {
+      position: 'absolute',
+      top: 9,
+      right: 10,
+      width: 6,
+      height: 6,
+      borderRadius: 3,
+      backgroundColor: colors.primary,
+    },
+
+    /* ========================================================
+       SECTION HEADER
+    ======================================================== */
+
+    sectionHeader: {
+      height: 35,
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      marginBottom: 7,
+    },
+
+    sectionTitle: {
+      color: colors.text,
+      fontSize: 21,
+      lineHeight: 27,
+      fontWeight: '700',
+      letterSpacing: -0.35,
+      includeFontPadding: false,
+    },
+
+    latestText: {
+      color: colors.primary,
+      fontSize: 11,
+      lineHeight: 15,
+      fontWeight: '700',
+      includeFontPadding: false,
+    },
+
+    /* ========================================================
+       LIST
+    ======================================================== */
+
+    listContent: {
+      paddingTop: 1,
+      paddingBottom: 14,
+    },
+
+    /* ========================================================
+       NEWS CARD
+    ======================================================== */
+
+    newsCard: {
+      width: '100%',
+      backgroundColor: colors.surface,
+      borderRadius: 20,
+      borderWidth: 1,
+      borderColor: colors.border,
+      overflow: 'hidden',
+      marginBottom: 11,
+
+      shadowColor: '#000000',
+      shadowOffset: {
+        width: 0,
+        height: 4,
+      },
+      shadowOpacity: 0.065,
+      shadowRadius: 10,
+      elevation: 2,
+    },
+
+    /* ========================================================
+       IMAGE
+    ======================================================== */
+
+    imageContainer: {
+      width: '100%',
+      backgroundColor: colors.surface,
+      position: 'relative',
+      overflow: 'hidden',
+    },
+
+    newsImage: {
+      width: '100%',
+      height: '100%',
+    },
+
+    imageOverlay: {
+      position: 'absolute',
+      left: 0,
+      right: 0,
+      bottom: 0,
+      height: 70,
+      backgroundColor: 'rgba(0,0,0,0.18)',
+    },
+
+    /* ========================================================
+       CATEGORY
+    ======================================================== */
+
+    imageCategory: {
+      position: 'absolute',
+      left: 12,
+      bottom: 11,
+      paddingHorizontal: 9,
+      paddingVertical: 5,
+      borderRadius: 10,
+      backgroundColor: 'rgba(255,255,255,0.94)',
+    },
+
+    imageCategoryText: {
+      color: '#087CFF',
+      fontSize: 10,
+      lineHeight: 13,
+      fontWeight: '700',
+      includeFontPadding: false,
+    },
+
+    /* ========================================================
+       VIDEO BUTTON
+    ======================================================== */
+
+    videoButton: {
+      position: 'absolute',
+      top: '50%',
+      left: '50%',
+      width: 48,
+      height: 48,
+      marginLeft: -24,
+      marginTop: -24,
+      borderRadius: 24,
+      backgroundColor: 'rgba(10,23,42,0.82)',
+      alignItems: 'center',
+      justifyContent: 'center',
+      paddingLeft: 2,
+      borderWidth: 1,
+      borderColor: 'rgba(255,255,255,0.35)',
+    },
+
+    /* ========================================================
+       BOOKMARK
+    ======================================================== */
+
+    imageBookmark: {
+      position: 'absolute',
+      top: 11,
+      right: 11,
+      width: 36,
+      height: 36,
+      borderRadius: 18,
+      backgroundColor: 'rgba(10,23,42,0.48)',
+      alignItems: 'center',
+      justifyContent: 'center',
+      borderWidth: 1,
+      borderColor: 'rgba(255,255,255,0.25)',
+    },
+
+    /* ========================================================
+       CONTENT
+    ======================================================== */
+
+    newsContent: {
+      paddingHorizontal: 14,
+      paddingTop: 11,
+      paddingBottom: 11,
+    },
+
+    newsTitle: {
+      color: colors.text,
+      fontSize: 16,
+      lineHeight: 21,
+      fontWeight: '700',
+      letterSpacing: -0.15,
+      includeFontPadding: false,
+    },
+
+    /* ========================================================
+       META
+    ======================================================== */
+
+    metaRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginTop: 8,
+      minHeight: 17,
+    },
+
+    timeContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+
+    time: {
+      color: colors.textMuted,
+      fontSize: 10,
+      lineHeight: 14,
+      fontWeight: '500',
+      marginLeft: 4,
+      includeFontPadding: false,
+    },
+
+    videoLabel: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginLeft: 10,
+      paddingLeft: 10,
+      borderLeftWidth: 1,
+      borderLeftColor: colors.border,
+    },
+
+    videoLabelText: {
+      color: colors.primary,
+      fontSize: 10,
+      lineHeight: 14,
+      fontWeight: '600',
+      marginLeft: 4,
+      includeFontPadding: false,
+    },
+
+    /* ========================================================
+       PRESSED CARD
+    ======================================================== */
+
+    cardPressed: {
+      opacity: 0.75,
+      transform: [
+        {
+          scale: 0.99,
+        },
+      ],
+    },
+  });
